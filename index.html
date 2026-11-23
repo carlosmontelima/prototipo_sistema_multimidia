@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Áudio Digital, Música e Voz — Bancada Interativa</title>
+  <meta name="description" content="Sistema multimídia educacional não-linear sobre Áudio Digital, Modulação PCM, Compressão, Formatos, Síntese Musical, MIDI e Processamento de Voz.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' rx='3' fill='%23111114'/%3E%3Crect x='1' y='10' width='2' height='4' fill='%2371717A'/%3E%3Crect x='4' y='6' width='2' height='8' fill='%23A1A1AA'/%3E%3Crect x='7' y='2' width='2' height='12' fill='%23FF5500'/%3E%3Crect x='10' y='5' width='2' height='9' fill='%2338BDF8'/%3E%3Crect x='13' y='8' width='2' height='6' fill='%2371717A'/%3E%3C/svg%3E">
+
+  <!-- Tipografia: Inter (UI/Leitura) + JetBrains Mono (Leitores Numéricos) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ======================================================================
+       CABEÇALHO FIXO MINIMALISTA
+       ====================================================================== -->
+  <header class="studio-header" role="banner">
+    <div class="header-brand">
+      <div class="pixel-emblem" aria-hidden="true">
+        <svg class="pixel-art" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="10" width="2" height="4" fill="#71717A"/>
+          <rect x="4" y="6"  width="2" height="8" fill="#A1A1AA"/>
+          <rect x="7" y="2"  width="2" height="12" fill="#FF5500"/>
+          <rect x="10" y="5" width="2" height="9" fill="#38BDF8"/>
+          <rect x="13" y="8" width="2" height="6" fill="#71717A"/>
+        </svg>
+      </div>
+      <span class="brand-name">Áudio Digital, Música e Voz</span>
+    </div>
+
+    <div class="header-controls">
+      <div class="visited-counter" title="Ambientes explorados livremente">
+        <div class="visited-leds" id="visitedLedsRow" aria-hidden="true">
+          <span class="led led--sm" data-visited-dot="fisica-fourier"></span>
+          <span class="led led--sm" data-visited-dot="pcm-digitalizacao"></span>
+          <span class="led led--sm" data-visited-dot="compressao-formatos"></span>
+          <span class="led led--sm" data-visited-dot="sintese-midi-voz"></span>
+          <span class="led led--sm" data-visited-dot="estudio-autoral"></span>
+          <span class="led led--sm" data-visited-dot="quiz-interativo"></span>
+        </div>
+        <span class="mono" id="visitedCounterText">1/6</span>
+      </div>
+
+      <div class="engine-telemetry" id="audioEngineStatus" data-state="standby" role="status" aria-live="polite">
+        <span class="led led--idle" id="audioEngineLed"></span>
+        <span>Web Audio</span>
+        <span class="engine-telemetry-state" id="audioEngineText">Inativo</span>
+      </div>
+
+      <button type="button" class="btn btn--sm" id="openTeamModalBtn" aria-haspopup="dialog" aria-controls="teamModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>Equipe e Sobre</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       SHELL PRINCIPAL: SIDEBAR 220PX + WORKBENCH
+       ====================================================================== -->
+  <div class="studio-shell">
+
+    <aside class="studio-sidebar" aria-label="Navegação não-linear entre bancadas">
+      <nav class="nav-rack" role="tablist" aria-label="Ambientes de estudo">
+        <button type="button" class="nav-module-btn is-active" role="tab" aria-selected="true" aria-controls="panel-fisica-fourier" data-tab="fisica-fourier">
+          <span class="nav-module-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12c2-6 4-6 6 0s4 6 6 0 4-6 6 0 2 2 2 0"/>
+            </svg>
+          </span>
+          <span class="nav-module-title">Física &amp; Fourier</span>
+          <span class="led led--sm led--accent nav-module-led" data-nav-led="fisica-fourier"></span>
+        </button>
+
+        <button type="button" class="nav-module-btn" role="tab" aria-selected="false" aria-controls="panel-pcm-digitalizacao" data-tab="pcm-digitalizacao">
+          <span class="nav-module-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 17h3v-6h3v6h3V7h3v10h3v-4h3"/>
+            </svg>
+          </span>
+          <span class="nav-module-title">Digitalização &amp; PCM</span>
+          <span class="led led--sm nav-module-led" data-nav-led="pcm-digitalizacao"></span>
+        </button>
+
+        <button type="button" class="nav-module-btn" role="tab" aria-selected="false" aria-controls="panel-compressao-formatos" data-tab="compressao-formatos">
+          <span class="nav-module-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="6" height="6"/>
+              <rect x="14" y="4" width="6" height="6"/>
+              <rect x="4" y="14" width="6" height="6"/>
+              <rect x="14" y="14" width="6" height="6"/>
+            </svg>
+          </span>
+          <span class="nav-module-title">Compressão &amp; Formatos</span>
+          <span class="led led--sm nav-module-led" data-nav-led="compressao-formatos"></span>
+        </button>
+
+        <button type="button" class="nav-module-btn" role="tab" aria-selected="false" aria-controls="panel-sintese-midi-voz" data-tab="sintese-midi-voz">
+          <span class="nav-module-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="21" x2="4" y2="14"/>
+              <line x1="4" y1="10" x2="4" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12" y2="3"/>
+              <line x1="20" y1="21" x2="20" y2="16"/>
+              <line x1="20" y1="12" x2="20" y2="3"/>
+              <line x1="2" y1="14" x2="6" y2="14"/>
+              <line x1="10" y1="8" x2="14" y2="8"/>
+              <line x1="18" y1="16" x2="22" y2="16"/>
+            </svg>
+          </span>
+          <span class="nav-module-title">Síntese, MIDI &amp; Voz</span>
+          <span class="led led--sm nav-module-led" data-nav-led="sintese-midi-voz"></span>
+        </button>
+
+        <button type="button" class="nav-module-btn" role="tab" aria-selected="false" aria-controls="panel-estudio-autoral" data-tab="estudio-autoral">
+          <span class="nav-module-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </span>
+          <span class="nav-module-title">Estúdio Autoral</span>
+          <span class="led led--sm nav-module-led" data-nav-led="estudio-autoral"></span>
+        </button>
+
+        <button type="button" class="nav-module-btn" role="tab" aria-selected="false" aria-controls="panel-quiz-interativo" data-tab="quiz-interativo">
+          <span class="nav-module-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M9.5 9.5a2.5 2.5 0 0 1 4.8.8c0 1.7-2.3 2.2-2.3 2.2"/>
+              <line x1="12" y1="16.5" x2="12.01" y2="16.5"/>
+            </svg>
+          </span>
+          <span class="nav-module-title">Quiz Interativo</span>
+          <span class="led led--sm nav-module-led" data-nav-led="quiz-interativo"></span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="studio-main" id="studioMain">
+
+      <!-- ====================================================================
+           AMBIENTE: FÍSICA DO SOM & FOURIER
+           ==================================================================== -->
+      <section class="env-panel is-active" id="panel-fisica-fourier" role="tabpanel" aria-labelledby="title-fisica-fourier">
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="title-fisica-fourier">Física do Som &amp; Análise de Fourier</h1>
+            <p class="panel-lead">Síntese aditiva de harmônicos senoidais e conversão eletroacústica em transdutores.</p>
+          </div>
+          <div class="panel-crosslinks">
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="pcm-digitalizacao">Digitalização PCM</button>
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="sintese-midi-voz">Analisador FFT</button>
+          </div>
+        </div>
+
+        <div class="workbench-split">
+          <!-- COLUNA ESQUERDA: PALCO INTERATIVO (LOGO NO TOPO) -->
+          <div class="workbench-stage">
+            <section class="surface-panel" id="fourierSimulator" aria-label="Simulador de Síntese Aditiva de Fourier">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">
+                  <span class="led led--idle" id="fourierLed"></span>
+                  <span>Simulador de Síntese Aditiva (Fourier)</span>
+                </h2>
+                <div class="row-wrap">
+                  <button type="button" class="btn btn--ghost btn--xs" data-fourier-preset="sine">Senoide</button>
+                  <button type="button" class="btn btn--ghost btn--xs" data-fourier-preset="square">Quadrada</button>
+                  <button type="button" class="btn btn--ghost btn--xs" data-fourier-preset="saw">Dente de Serra</button>
+                  <button type="button" class="btn btn--ghost btn--xs" data-fourier-preset="reset">Reset</button>
+                  <button type="button" class="btn btn--primary btn--sm" id="fourierPlayBtn" data-state="stopped">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,4 20,12 6,20"/></svg>
+                    <span>Play / Stop</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="scope-frame">
+                <div class="scope-meta">
+                  <span>Forma de onda resultante</span>
+                  <div class="row-wrap">
+                    <span class="readout-chip">f<sub>0</sub> <strong id="fourierBaseFreqBadge">220 Hz</strong></span>
+                    <span class="readout-chip">Potência (A&sup2;) <strong id="fourierPowerReadout">1.00</strong></span>
+                  </div>
+                </div>
+                <canvas id="fourierCanvas" class="scope-canvas" width="760" height="230" aria-label="Gráfico interativo da onda resultante de síntese aditiva de Fourier"></canvas>
+              </div>
+
+              <div class="fader-group mt-sm">
+                <div class="fader-label-row">
+                  <label class="fader-label" for="fourierBaseFreq">Frequência Fundamental (f<sub>0</sub>)</label>
+                  <span class="fader-readout fader-readout--accent" id="fourierBaseFreqVal">220 Hz</span>
+                </div>
+                <input type="range" id="fourierBaseFreq" class="studio-fader" min="110" max="880" step="10" value="220" data-unit="Hz">
+                <div class="fader-scale"><span>110 Hz</span><span>440 Hz</span><span>880 Hz</span></div>
+              </div>
+
+              <div class="grid-2 mt-sm">
+                <div class="fader-group">
+                  <div class="fader-label-row">
+                    <label class="fader-label" for="fourierH1">Fundamental (f<sub>0</sub>)</label>
+                    <span class="fader-readout" id="fourierH1Val">1.00</span>
+                  </div>
+                  <input type="range" id="fourierH1" class="studio-fader" min="0" max="1" step="0.05" value="1.00" data-format="fixed2">
+                </div>
+
+                <div class="fader-group">
+                  <div class="fader-label-row">
+                    <label class="fader-label" for="fourierH2">2&ordm; Harmônico (2f<sub>0</sub>)</label>
+                    <span class="fader-readout" id="fourierH2Val">0.00</span>
+                  </div>
+                  <input type="range" id="fourierH2" class="studio-fader" min="0" max="1" step="0.05" value="0.00" data-format="fixed2">
+                </div>
+
+                <div class="fader-group">
+                  <div class="fader-label-row">
+                    <label class="fader-label" for="fourierH3">3&ordm; Harmônico (3f<sub>0</sub>)</label>
+                    <span class="fader-readout" id="fourierH3Val">0.00</span>
+                  </div>
+                  <input type="range" id="fourierH3" class="studio-fader" min="0" max="1" step="0.05" value="0.00" data-format="fixed2">
+                </div>
+
+                <div class="fader-group">
+                  <div class="fader-label-row">
+                    <label class="fader-label" for="fourierH4">4&ordm; Harmônico (4f<sub>0</sub>)</label>
+                    <span class="fader-readout" id="fourierH4Val">0.00</span>
+                  </div>
+                  <input type="range" id="fourierH4" class="studio-fader" min="0" max="1" step="0.05" value="0.00" data-format="fixed2">
+                </div>
+              </div>
+            </section>
+
+            <!-- Diagrama Vetorial SVG Inline do Alto-Falante -->
+            <section class="surface-panel" aria-label="Diagrama Vetorial Técnico do Alto-Falante">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">Transdutor: Alto-Falante Dinâmico</h2>
+                <div class="row-wrap">
+                  <span class="readout-chip">Excursão <strong id="speakerDisplacementReadout">0.00 mm</strong></span>
+                  <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="transdutor">Ampliar SVG</button>
+                </div>
+              </div>
+
+              <div class="svg-stage">
+                <svg id="speakerTransducerSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" role="img" aria-label="Diagrama técnico de alto-falante com ímã permanente N/S, bobina móvel, tensão de áudio, cone e ondas sonoras">
+                  <defs>
+                    <pattern id="inlineSpeakerGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+                      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#18181C" stroke-width="0.75"/>
+                    </pattern>
+                    <linearGradient id="inlineMagnetN" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#FF5500" stop-opacity="0.22"/>
+                      <stop offset="100%" stop-color="#FF5500" stop-opacity="0.06"/>
+                    </linearGradient>
+                    <linearGradient id="inlineMagnetS" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.08"/>
+                      <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.24"/>
+                    </linearGradient>
+                    <marker id="inlineArrowAmber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#FF5500"/>
+                    </marker>
+                    <marker id="inlineArrowMuted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#71717A"/>
+                    </marker>
+                  </defs>
+
+                  <g id="inline-speaker-bg">
+                    <rect x="0" y="0" width="820" height="320" rx="6" fill="#09090B"/>
+                    <rect x="0" y="0" width="820" height="320" rx="6" fill="url(#inlineSpeakerGrid)"/>
+                  </g>
+
+                  <!-- Tensão de Áudio -->
+                  <g id="speakerVoltageGroup">
+                    <polyline points="116,216 386,216 386,174" fill="none" stroke="#FF5500" stroke-width="1.8" stroke-linejoin="round"/>
+                    <polyline points="116,262 472,262 472,174" fill="none" stroke="#FF5500" stroke-width="1.8" stroke-linejoin="round"/>
+                    <circle cx="108" cy="216" r="5" fill="#09090B" stroke="#FF5500" stroke-width="1.8"/>
+                    <circle cx="108" cy="262" r="5" fill="#09090B" stroke="#FF5500" stroke-width="1.8"/>
+                    <text x="86" y="220" fill="#FF5500" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600">+</text>
+                    <text x="86" y="266" fill="#FF5500" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600">-</text>
+                    <path d="M 52 239 Q 60 223, 68 239 T 84 239" fill="none" stroke="#FF5500" stroke-width="1.6"/>
+                    <text x="132" y="244" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="12.5" font-weight="600">Tensão de Áudio V(t)</text>
+                  </g>
+
+                  <!-- Ímã Permanente N/S -->
+                  <g id="speakerMagnetGroup">
+                    <rect x="210" y="118" width="122" height="44" rx="2" fill="url(#inlineMagnetN)" stroke="#FF5500" stroke-width="1.6"/>
+                    <rect x="332" y="118" width="84" height="44" rx="2" fill="url(#inlineMagnetS)" stroke="#38BDF8" stroke-width="1.6" stroke-dasharray="5 3"/>
+                    <line x1="332" y1="118" x2="332" y2="162" stroke="#52525B" stroke-width="1.4"/>
+                    <text x="234" y="146" fill="#FF5500" font-family="'JetBrains Mono', monospace" font-size="17" font-weight="600">N</text>
+                    <text x="386" y="146" fill="#38BDF8" font-family="'JetBrains Mono', monospace" font-size="17" font-weight="600">S</text>
+                  </g>
+
+                  <!-- Bobina Móvel -->
+                  <g id="speakerCoilGroup">
+                    <rect x="372" y="106" width="114" height="68" rx="3" fill="rgba(244, 244, 245, 0.03)" stroke="#A1A1AA" stroke-width="1.5"/>
+                    <path d="M 386 106 C 386 96, 404 96, 404 106 L 404 174 C 404 184, 422 184, 422 174 L 422 106 C 422 96, 440 96, 440 106 L 440 174 C 440 184, 458 184, 458 174 L 458 106 C 458 96, 472 96, 472 106 L 472 174" fill="none" stroke="#FF5500" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="386" y1="106" x2="386" y2="174" stroke="#FF5500" stroke-width="1.8"/>
+                  </g>
+
+                  <!-- Cone do Alto-Falante -->
+                  <g id="speakerConeGroup">
+                    <line x1="486" y1="140" x2="544" y2="140" stroke="#A1A1AA" stroke-width="2.6"/>
+                    <polygon points="544,140 618,76 618,204" fill="#18181B" stroke="#F4F4F5" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M 564 123 Q 576 140, 564 157" fill="none" stroke="#38BDF8" stroke-width="1.6"/>
+                  </g>
+
+                  <!-- Indicador de Movimento -->
+                  <g id="speakerMotionIndicator">
+                    <line x1="546" y1="58" x2="626" y2="58" stroke="#FF5500" stroke-width="1.8" marker-start="url(#inlineArrowAmber)" marker-end="url(#inlineArrowAmber)"/>
+                    <text x="586" y="46" text-anchor="middle" fill="#A1A1AA" font-family="'Inter', sans-serif" font-size="11" font-weight="600">Movimento</text>
+                  </g>
+
+                  <!-- Ondas Sonoras -->
+                  <g id="speakerWavesGroup">
+                    <path id="speakerWave1" d="M 644 92 C 658 108, 658 172, 644 188" fill="none" stroke="#FF5500" stroke-width="2.2" stroke-linecap="round" opacity="0.95"/>
+                    <path id="speakerWave2" d="M 668 80 C 688 104, 688 176, 668 200" fill="none" stroke="#FF5500" stroke-width="1.8" stroke-linecap="round" opacity="0.72"/>
+                    <path id="speakerWave3" d="M 696 68 C 722 100, 722 180, 696 212" fill="none" stroke="#38BDF8" stroke-width="1.6" stroke-linecap="round" opacity="0.58"/>
+                    <path id="speakerWave4" d="M 728 58 C 758 98, 758 182, 728 222" fill="none" stroke="#38BDF8" stroke-width="1.3" stroke-linecap="round" opacity="0.36"/>
+                  </g>
+
+                  <!-- Legendas -->
+                  <g id="speakerLabelsGroup">
+                    <text x="38" y="138" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="12" font-weight="600">Ímã Permanente</text>
+                    <line x1="146" y1="140" x2="204" y2="140" stroke="#71717A" stroke-width="1.2" marker-end="url(#inlineArrowMuted)"/>
+                    <text x="320" y="62" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="12" font-weight="600">Bobina Móvel</text>
+                    <line x1="364" y1="68" x2="392" y2="96" stroke="#71717A" stroke-width="1.2" marker-end="url(#inlineArrowMuted)"/>
+                    <text x="530" y="278" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="12" font-weight="600">Cone do Alto-Falante</text>
+                    <line x1="574" y1="258" x2="594" y2="200" stroke="#71717A" stroke-width="1.2" marker-end="url(#inlineArrowMuted)"/>
+                    <text x="720" y="254" text-anchor="middle" fill="#A1A1AA" font-family="'Inter', sans-serif" font-size="12" font-weight="600">Ondas Sonoras</text>
+                  </g>
+                </svg>
+              </div>
+            </section>
+          </div>
+
+          <!-- COLUNA DIREITA: INSPETOR TEÓRICO CONTÍNUO -->
+          <aside class="workbench-inspector" aria-label="Inspetor teórico de Física do Som e Fourier">
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Ondas de Pressão e Potência</h2>
+              <ul class="inspector-list">
+                <li>Vibrações sonoras propagam-se no ar como <strong>ondas de pressão atmosférica</strong> (regiões alternadas de compressão e rarefação).</li>
+                <li>A potência transportada pela onda é proporcional ao quadrado da amplitude de vibração.</li>
+                <li>A forma mais simples é a <strong>onda senoidal</strong>; sinais complexos resultam da soma de componentes senoidais (Análise de Fourier e Síntese Aditiva).</li>
+              </ul>
+              <div class="formula-box">
+                <div class="formula-line">
+                  <span class="formula-label">Potência Acústica</span>
+                  <span class="formula-expr formula-expr--accent">P &prop; A&sup2;</span>
+                </div>
+                <div class="formula-line">
+                  <span class="formula-label">Síntese Aditiva</span>
+                  <span class="formula-expr formula-expr--blue">y(t) = &Sigma; A<sub>n</sub> sin(2&pi; n f<sub>0</sub> t)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Representação Analógica e Ruído</h2>
+              <p class="inspector-text">
+                No meio analógico, o som é propagado como sinal elétrico contínuo e armazenado em meios magnéticos ou mecânicos.
+              </p>
+              <p class="inspector-text">
+                Sua limitação estrutural é a <strong>contaminação cumulativa por ruído</strong> em todas as transformações, amplificações, cópias e transmissões.
+              </p>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Transdutores</h2>
+              <ul class="inspector-list">
+                <li><strong>Acústico &rarr; Elétrico (Microfones):</strong> convertem variações de pressão do ar em tensão elétrica analógica.</li>
+                <li><strong>Elétrico &rarr; Acústico (Alto-Falantes):</strong> a tensão na bobina móvel interage com o campo do ímã permanente (N/S), deslocando o cone para gerar pressão sonora.</li>
+              </ul>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Registro Fotográfico — Transdutores</h2>
+              <figure class="studio-figure" data-raster-figure data-figure-title="Transdutores de Estúdio (Microfone e Monitor)">
+                <div class="studio-figure-frame">
+                  <div class="studio-figure-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span class="mono text-xs text-muted">assets/imagens/fisica_transdutores.png</span>
+                  </div>
+                  <img class="studio-figure-img" src="assets/imagens/fisica_transdutores.png" alt="Fotografia de microfone e monitor de referência utilizados na captação e reprodução sonora" hidden>
+                </div>
+                <figcaption class="studio-figure-caption">
+                  <span>Microfone (captação) e monitor/fone (reprodução)</span>
+                  <span class="mono text-xs text-muted">PNG</span>
+                </figcaption>
+              </figure>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           AMBIENTE: DIGITALIZAÇÃO & MODULAÇÃO PCM
+           ==================================================================== -->
+      <section class="env-panel" id="panel-pcm-digitalizacao" role="tabpanel" aria-labelledby="title-pcm-digitalizacao">
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="title-pcm-digitalizacao">Digitalização &amp; Modulação PCM</h1>
+            <p class="panel-lead">Filtragem passa-baixas, amostragem (PAM), Critério de Nyquist, quantização e erro de quantização.</p>
+          </div>
+          <div class="panel-crosslinks">
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="compressao-formatos">Calculadora de Bitrate</button>
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="quiz-interativo">Quiz Interativo</button>
+          </div>
+        </div>
+
+        <div class="workbench-split">
+          <!-- COLUNA ESQUERDA: BANCADA PCM INTERATIVA NO TOPO + CADEIA SVG -->
+          <div class="workbench-stage">
+            <section class="surface-panel" id="pcmWorkbench" aria-label="Bancada PCM Interativa">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">
+                  <span class="led led--idle" id="pcmAudioLed"></span>
+                  <span>Bancada PCM Interativa</span>
+                </h2>
+                <div class="row-wrap">
+                  <button type="button" class="btn btn--ghost btn--xs" data-pcm-preset="telephony">Telefonia (8 kHz)</button>
+                  <button type="button" class="btn btn--ghost btn--xs" data-pcm-preset="lofi">Lo-Fi (3 bits)</button>
+                  <button type="button" class="btn btn--ghost btn--xs" data-pcm-preset="aliasing">Aliasing</button>
+                  <button type="button" class="btn btn--primary btn--sm" id="pcmAudioTestBtn" data-state="stopped">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    </svg>
+                    <span>Ouvir Degradação</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Alerta de Aliasing (Nyquist) -->
+              <div class="nyquist-banner" id="pcmAliasingAlert" role="status" aria-live="polite">
+                <div class="nyquist-status-main">
+                  <span class="led led--lg led--ok" id="pcmAliasingLed"></span>
+                  <div>
+                    <div class="nyquist-status-title" id="pcmAliasingTitle">Critério de Nyquist atendido</div>
+                    <div class="nyquist-status-sub" id="pcmAliasingSub">A taxa de amostragem satisfaz Fa &ge; 2 &middot; Fmax sem sobreposição espectral.</div>
+                  </div>
+                </div>
+                <span class="readout-chip"><strong id="pcmNyquistRatio">Fa / Fmax = 8.00x</strong></span>
+              </div>
+
+              <!-- Canvases: Sinal + Erro -->
+              <div class="stack-sm mt-sm">
+                <div class="scope-frame">
+                  <div class="scope-meta">
+                    <span>Sinal original (#38BDF8) vs. amostras PAM e degraus quantizados (#FF5500)</span>
+                  </div>
+                  <canvas id="pcmSignalCanvas" class="scope-canvas" width="840" height="220" aria-label="Osciloscópio do sinal analógico, amostras PAM e degraus quantizados"></canvas>
+                </div>
+
+                <div class="scope-frame">
+                  <div class="scope-meta">
+                    <span>Erro de quantização &epsilon;(t) = X<sub>sq</sub> - X<sub>s</sub></span>
+                    <span class="mono text-xs text-muted">&plusmn;q / 2</span>
+                  </div>
+                  <canvas id="pcmErrorCanvas" class="scope-canvas scope-canvas--compact" width="840" height="112" aria-label="Osciloscópio da onda de erro de quantização"></canvas>
+                </div>
+              </div>
+
+              <!-- Faders PCM -->
+              <div class="grid-3 mt-sm">
+                <div class="fader-group">
+                  <div class="fader-label-row">
+                    <label class="fader-label" for="pcmSignalFreq">Sinal (F<sub>max</sub>)</label>
+                    <span class="fader-readout fader-readout--blue" id="pcmSignalFreqVal">1.000 Hz</span>
+                  </div>
+                  <input type="range" id="pcmSignalFreq" class="studio-fader studio-fader--blue" min="200" max="6000" step="100" value="1000" data-unit="Hz">
+                  <div class="fader-scale"><span>200 Hz</span><span>6.000 Hz</span></div>
+                </div>
+
+                <div class="fader-group">
+                  <div class="fader-label-row">
+                    <label class="fader-label" for="pcmSampleRate">Amostragem (F<sub>a</sub>)</label>
+                    <span class="fader-readout fader-readout--accent" id="pcmSampleRateVal">8.000 Hz</span>
+                  </div>
+                  <input type="range" id="pcmSampleRate" class="studio-fader" min="1000" max="24000" step="500" value="8000" data-unit="Hz">
+                  <div class="fader-scale"><span>1 kHz</span><span id="pcmSamplePeriodVal">Ta = 125.0 &micro;s</span><span>24 kHz</span></div>
+                </div>
+
+                <div class="fader-group">
+                  <div class="fader-label-row">
+                    <label class="fader-label" for="pcmBitDepth">Quantização (v)</label>
+                    <span class="fader-readout" id="pcmBitDepthVal">3 bits</span>
+                  </div>
+                  <input type="range" id="pcmBitDepth" class="studio-fader" min="2" max="8" step="1" value="3">
+                  <div class="fader-scale"><span>2 bits</span><span id="pcmLevelsVal">q = 2^3 = 8</span><span>8 bits</span></div>
+                </div>
+              </div>
+
+              <!-- Leitura da Amostra Individual -->
+              <div class="mt-sm" id="pcmSampleInspector">
+                <div class="row-between" style="margin-bottom: 8px;">
+                  <span class="text-xs text-secondary">Inspeção da amostra discreta</span>
+                  <div class="row-wrap">
+                    <label class="text-xs text-muted" for="pcmSampleIndex">Amostra t<sub>i</sub></label>
+                    <input type="range" id="pcmSampleIndex" class="studio-fader" style="width: 130px;" min="0" max="15" step="1" value="2">
+                    <span class="mono text-xs text-primary" id="pcmSampleIndexVal">#02</span>
+                  </div>
+                </div>
+                <div class="grid-4">
+                  <div class="lcd-cell">
+                    <span class="lcd-cell-label">Original (X<sub>s</sub>)</span>
+                    <span class="lcd-cell-val lcd-cell-val--blue" id="pcmReadoutXs">6.20</span>
+                  </div>
+                  <div class="lcd-cell">
+                    <span class="lcd-cell-label">Quantizado (X<sub>sq</sub>)</span>
+                    <span class="lcd-cell-val lcd-cell-val--accent" id="pcmReadoutXsq">6</span>
+                  </div>
+                  <div class="lcd-cell">
+                    <span class="lcd-cell-label">Erro (&epsilon;<sub>i</sub>)</span>
+                    <span class="lcd-cell-val lcd-cell-val--red" id="pcmReadoutError">-0.20</span>
+                  </div>
+                  <div class="lcd-cell">
+                    <span class="lcd-cell-label">Binário PCM</span>
+                    <span class="lcd-cell-val" id="pcmReadoutBinary">110</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Fluxo Visual SVG da Cadeia PCM -->
+            <section class="surface-panel" aria-label="Cadeia Visual de Digitalização PCM">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">Cadeia de Digitalização (ADC &rarr; Sistema Digital &rarr; DAC)</h2>
+                <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="pcm">Ampliar SVG</button>
+              </div>
+              <div class="svg-stage">
+                <svg id="pcmPipelineSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 230" role="img" aria-label="Fluxograma da cadeia de digitalização PCM do sinal analógico ao DAC">
+                  <defs>
+                    <marker id="pcmArrGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#FF5500"/>
+                    </marker>
+                    <marker id="pcmArrAmber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#71717A"/>
+                    </marker>
+                    <marker id="pcmArrCyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38BDF8"/>
+                    </marker>
+                  </defs>
+                  <rect x="0" y="0" width="1080" height="230" rx="6" fill="#09090B"/>
+                  <rect x="146" y="14" width="584" height="202" rx="6" fill="#111114" stroke="#27272A" stroke-width="1" stroke-dasharray="5 4"/>
+                  <text x="160" y="34" fill="#A1A1AA" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600">Conversor Analógico-Digital (ADC / PCM)</text>
+
+                  <g data-pcm-stage="analog">
+                    <rect x="18" y="56" width="102" height="96" rx="6" fill="#111114" stroke="#38BDF8" stroke-width="1.4"/>
+                    <text x="69" y="79" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11" font-weight="600">Sinal Analógico</text>
+                    <path d="M 32 122 C 42 98, 52 98, 62 122 S 82 146, 92 122 S 100 108, 108 120" fill="none" stroke="#38BDF8" stroke-width="1.8"/>
+                    <text x="69" y="172" text-anchor="middle" fill="#71717A" font-family="'JetBrains Mono', monospace" font-size="9.5">x(t)</text>
+                  </g>
+
+                  <g data-pcm-stage="filter">
+                    <rect x="160" y="56" width="118" height="96" rx="6" fill="#18181B" stroke="#323238" stroke-width="1.2"/>
+                    <text x="219" y="79" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11" font-weight="600">Filtro Passa-Baixas</text>
+                    <path d="M 182 114 L 220 114 Q 234 114, 242 138 L 256 138" fill="none" stroke="#38BDF8" stroke-width="1.8"/>
+                    <text x="219" y="172" text-anchor="middle" fill="#71717A" font-family="'JetBrains Mono', monospace" font-size="9">300 - 3400 Hz</text>
+                  </g>
+
+                  <g data-pcm-stage="sampler">
+                    <rect x="306" y="56" width="118" height="96" rx="6" fill="#18181B" stroke="#323238" stroke-width="1.2"/>
+                    <text x="365" y="79" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11" font-weight="600">Amostrador (PAM)</text>
+                    <line x1="322" y1="136" x2="408" y2="136" stroke="#323238" stroke-width="1"/>
+                    <line x1="334" y1="136" x2="334" y2="120" stroke="#FF5500" stroke-width="2.6"/>
+                    <line x1="350" y1="136" x2="350" y2="106" stroke="#FF5500" stroke-width="2.6"/>
+                    <line x1="366" y1="136" x2="366" y2="114" stroke="#FF5500" stroke-width="2.6"/>
+                    <line x1="382" y1="136" x2="382" y2="128" stroke="#FF5500" stroke-width="2.6"/>
+                    <line x1="398" y1="136" x2="398" y2="112" stroke="#FF5500" stroke-width="2.6"/>
+                    <text x="365" y="172" text-anchor="middle" fill="#A1A1AA" font-family="'JetBrains Mono', monospace" font-size="9">Fa &ge; 2 &middot; Fmax</text>
+                  </g>
+
+                  <g data-pcm-stage="quantizer">
+                    <rect x="452" y="56" width="118" height="96" rx="6" fill="#18181B" stroke="#323238" stroke-width="1.2"/>
+                    <text x="511" y="79" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11" font-weight="600">Quantizador</text>
+                    <polyline points="470,136 484,136 484,124 498,124 498,112 512,112 512,104 530,104 530,118 550,118" fill="none" stroke="#FF5500" stroke-width="1.8"/>
+                    <text x="511" y="172" text-anchor="middle" fill="#A1A1AA" font-family="'JetBrains Mono', monospace" font-size="9">q = &mu;^v</text>
+                  </g>
+
+                  <g data-pcm-stage="encoder">
+                    <rect x="598" y="56" width="118" height="96" rx="6" fill="#18181B" stroke="#FF5500" stroke-width="1.4"/>
+                    <text x="657" y="79" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11" font-weight="600">Codificador Binário</text>
+                    <rect x="612" y="102" width="90" height="28" rx="4" fill="#09090B" stroke="#222226"/>
+                    <text x="657" y="120" text-anchor="middle" fill="#FF5500" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600">110 100 001</text>
+                    <text x="657" y="172" text-anchor="middle" fill="#71717A" font-family="'JetBrains Mono', monospace" font-size="9">v bits / amostra</text>
+                  </g>
+
+                  <g data-pcm-stage="digital-sys">
+                    <rect x="756" y="56" width="122" height="96" rx="6" fill="#111114" stroke="#323238" stroke-width="1.4"/>
+                    <text x="817" y="96" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600">Sistema Digital</text>
+                    <text x="817" y="116" text-anchor="middle" fill="#71717A" font-family="'JetBrains Mono', monospace" font-size="9">DSP / CD / PC</text>
+                  </g>
+
+                  <g data-pcm-stage="dac">
+                    <polygon points="912,56 1004,104 912,152" fill="#111114" stroke="#FF5500" stroke-width="1.5" stroke-linejoin="round"/>
+                    <text x="944" y="109" text-anchor="middle" fill="#F4F4F5" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600">DAC</text>
+                    <path d="M 1022 104 Q 1032 82, 1042 104 T 1062 104" fill="none" stroke="#38BDF8" stroke-width="1.8"/>
+                    <text x="954" y="172" text-anchor="middle" fill="#71717A" font-family="'Inter', sans-serif" font-size="10">Reconstrução</text>
+                  </g>
+
+                  <line x1="120" y1="104" x2="154" y2="104" stroke="#38BDF8" stroke-width="1.8" marker-end="url(#pcmArrCyan)"/>
+                  <line x1="278" y1="104" x2="300" y2="104" stroke="#71717A" stroke-width="1.8" marker-end="url(#pcmArrAmber)"/>
+                  <line x1="424" y1="104" x2="446" y2="104" stroke="#FF5500" stroke-width="1.8" marker-end="url(#pcmArrGreen)"/>
+                  <line x1="570" y1="104" x2="592" y2="104" stroke="#FF5500" stroke-width="1.8" marker-end="url(#pcmArrGreen)"/>
+                  <line x1="716" y1="104" x2="750" y2="104" stroke="#71717A" stroke-width="1.8" marker-end="url(#pcmArrAmber)"/>
+                  <line x1="878" y1="104" x2="906" y2="104" stroke="#71717A" stroke-width="1.8" marker-end="url(#pcmArrAmber)"/>
+                  <line x1="1004" y1="104" x2="1018" y2="104" stroke="#38BDF8" stroke-width="1.8" marker-end="url(#pcmArrCyan)"/>
+                </svg>
+              </div>
+            </section>
+          </div>
+
+          <!-- COLUNA DIREITA: INSPETOR TEÓRICO CONTÍNUO -->
+          <aside class="workbench-inspector" aria-label="Inspetor teórico de Digitalização e PCM">
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Limitação em Banda (Voz)</h2>
+              <p class="inspector-text">
+                O primeiro passo da modulação PCM é a filtragem passa-baixas para limitar a frequência máxima presente no sinal e suavizar componentes de alta frequência antes da amostragem.
+              </p>
+              <div class="formula-box">
+                <div class="formula-line">
+                  <span class="formula-label">Faixa da Voz</span>
+                  <span class="formula-expr">300 Hz – 3.400 Hz</span>
+                </div>
+                <div class="formula-line">
+                  <span class="formula-label">Inteligibilidade</span>
+                  <span class="formula-expr formula-expr--accent">85%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Teorema da Amostragem (Nyquist)</h2>
+              <p class="inspector-text">
+                Para reconstruir o sinal sem aliasing (frequências falsas), a taxa de amostragem deve ser no mínimo o dobro da maior frequência do sinal (F<sub>max</sub>). Quanto maior a taxa, maior a precisão e o volume armazenado.
+              </p>
+              <div class="formula-box">
+                <div class="formula-line">
+                  <span class="formula-label">Critério de Nyquist</span>
+                  <span class="formula-expr formula-expr--accent">F<sub>a</sub> &ge; 2 &middot; F<sub>max</sub></span>
+                </div>
+                <div class="formula-line">
+                  <span class="formula-label">Telefonia PCM</span>
+                  <span class="formula-expr">F<sub>a</sub> = 8.000 Hz</span>
+                </div>
+                <div class="formula-line">
+                  <span class="formula-label">Intervalo (T<sub>a</sub> = 1/F<sub>a</sub>)</span>
+                  <span class="formula-expr formula-expr--blue">T<sub>a</sub> = 125 &micro;s</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Quantização e Ruído PCM</h2>
+              <p class="inspector-text">
+                O sinal PAM contínuo em amplitude é aproximado para o nível discreto mais próximo (valor de decisão) e convertido em palavra binária de <em>v</em> bits.
+              </p>
+              <p class="inspector-text">
+                Sistemas PCM são invulneráveis ao ruído de retransmissão física, porém a aproximação gera o <strong>erro de quantização</strong> (&epsilon;<sub>i</sub>), ouvido como ruído na recuperação analógica.
+              </p>
+              <div class="formula-box">
+                <div class="formula-line">
+                  <span class="formula-label">Níveis de Quantização</span>
+                  <span class="formula-expr formula-expr--accent">q = &mu;<sup>v</sup></span>
+                </div>
+                <div class="formula-line">
+                  <span class="formula-label">Exemplo Binário (v = 3)</span>
+                  <span class="formula-expr">q = 2&sup3; = 8 níveis</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Amostras Discretas na DAW</h2>
+              <figure class="studio-figure" data-raster-figure data-figure-title="Zoom de Amostras Discretas em DAW">
+                <div class="studio-figure-frame">
+                  <div class="studio-figure-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span class="mono text-xs text-muted">assets/imagens/pcm_amostragem_daw.png</span>
+                  </div>
+                  <img class="studio-figure-img" src="assets/imagens/pcm_amostragem_daw.png" alt="Captura de tela em zoom mostrando pontos individuais de amostra PCM em editor de áudio" hidden>
+                </div>
+                <figcaption class="studio-figure-caption">
+                  <span>Visualização de amostras discretas no editor</span>
+                  <span class="mono text-xs text-muted">PNG</span>
+                </figcaption>
+              </figure>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           AMBIENTE: COMPRESSÃO & FORMATOS (WAV, FLAC, MP3, ETC.)
+           ==================================================================== -->
+      <section class="env-panel" id="panel-compressao-formatos" role="tabpanel" aria-labelledby="title-compressao-formatos">
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="title-compressao-formatos">Compressão &amp; Formatos de Áudio</h1>
+            <p class="panel-lead">Inspeção descritiva de formatos, cálculo de bitrate/armazenamento e princípios de compressão.</p>
+          </div>
+          <div class="panel-crosslinks">
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="pcm-digitalizacao">Modulação PCM</button>
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="estudio-autoral">Comparador A/B</button>
+          </div>
+        </div>
+
+        <!-- PRIMEIRO LUGAR NA ABA: BALÕES CLICÁVEIS DE TODOS OS FORMATOS -->
+        <section class="formats-balloons-bar" id="formatChipsBar" aria-label="Explorador descritivo de formatos de áudio">
+          <div class="formats-balloons-head">
+            <h2 class="formats-balloons-title">Formatos de Áudio — Clique para ver os detalhes</h2>
+            <span class="formats-balloons-hint">Abre uma descrição técnica sobreposta à tela</span>
+          </div>
+          <div class="format-chips-wrap">
+            <button type="button" class="format-balloon-btn" data-format-key="wav"><span>WAV</span><span class="format-balloon-ext">.wav</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="aiff"><span>AIFF</span><span class="format-balloon-ext">.aiff</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="flac"><span>FLAC</span><span class="format-balloon-ext">.flac</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="mp3"><span>MP3</span><span class="format-balloon-ext">.mp3</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="mpa"><span>MPA / MP2</span><span class="format-balloon-ext">.mp2</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="ac3"><span>AC-3 Dolby</span><span class="format-balloon-ext">.ac3</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="opus"><span>Opus</span><span class="format-balloon-ext">.opus</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="adpcm"><span>ADPCM</span><span class="format-balloon-ext">codec</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="au"><span>AU</span><span class="format-balloon-ext">.au</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="wma"><span>WMA</span><span class="format-balloon-ext">.wma</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="ra"><span>Real Audio</span><span class="format-balloon-ext">.ra/.ram</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="qt"><span>QuickTime</span><span class="format-balloon-ext">.qt/.mov</span></button>
+            <button type="button" class="format-balloon-btn" data-format-key="midi"><span>MIDI</span><span class="format-balloon-ext">.mid</span></button>
+          </div>
+        </section>
+
+        <div class="workbench-split">
+          <!-- COLUNA ESQUERDA: CALCULADORA & TABELA COMPARATIVA -->
+          <div class="workbench-stage">
+            <section class="surface-panel" id="bitrateCalculator" aria-label="Calculadora e Comparador de Peso e Bitrate">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">Comparador e Calculadora de Peso e Bitrate</h2>
+                <div class="segmented-control" id="calcChannelsGroup" role="radiogroup" aria-label="Configuração de canais">
+                  <button type="button" class="segmented-btn" id="calcChannelsMono" data-channels="1" role="radio" aria-checked="false">Mono (1 ch)</button>
+                  <button type="button" class="segmented-btn is-selected" id="calcChannelsStereo" data-channels="2" role="radio" aria-checked="true">Estéreo (2 ch)</button>
+                </div>
+              </div>
+
+              <div class="fader-group">
+                <div class="fader-label-row">
+                  <label class="fader-label" for="calcDuration">Duração do Áudio</label>
+                  <span class="fader-readout fader-readout--accent" id="calcDurationVal">60 s (01:00)</span>
+                </div>
+                <input type="range" id="calcDuration" class="studio-fader" min="1" max="300" step="1" value="60" data-unit="s">
+                <div class="fader-scale"><span>1 s</span><span>60 s</span><span>180 s</span><span>300 s</span></div>
+              </div>
+
+              <!-- Barras Comparativas Uniformes (FLAC tratado igualmente aos demais formatos) -->
+              <div class="format-bars-list mt-sm" id="formatBarsContainer">
+                <div class="format-bar-row" data-format-id="wav-cd">
+                  <div class="format-bar-meta">
+                    <span class="format-bar-name">CD WAV / AIFF (PCM 44.1 kHz, 16-bit)</span>
+                    <div class="format-bar-stats">
+                      <span class="format-bar-rate" id="rate-wav-cd">176.400 bytes/s (1.411,2 kbps)</span>
+                      <span class="format-bar-size" id="size-wav-cd">10.09 MB</span>
+                    </div>
+                  </div>
+                  <div class="format-bar-track"><div class="format-bar-fill" id="bar-wav-cd" style="width: 100%;"></div></div>
+                </div>
+
+                <div class="format-bar-row" data-format-id="flac">
+                  <div class="format-bar-meta">
+                    <span class="format-bar-name">FLAC (Lossless — redução ~45%, bit-a-bit)</span>
+                    <div class="format-bar-stats">
+                      <span class="format-bar-rate" id="rate-flac">~97.020 bytes/s (~776 kbps)</span>
+                      <span class="format-bar-size" id="size-flac">5.55 MB</span>
+                    </div>
+                  </div>
+                  <div class="format-bar-track"><div class="format-bar-fill format-bar-fill--blue" id="bar-flac" style="width: 55%;"></div></div>
+                </div>
+
+                <div class="format-bar-row" data-format-id="ac3">
+                  <div class="format-bar-meta">
+                    <span class="format-bar-name">AC-3 Dolby Digital 5.1 (384 kbps)</span>
+                    <div class="format-bar-stats">
+                      <span class="format-bar-rate" id="rate-ac3">48.000 bytes/s (384 kbps)</span>
+                      <span class="format-bar-size" id="size-ac3">2.75 MB</span>
+                    </div>
+                  </div>
+                  <div class="format-bar-track"><div class="format-bar-fill" id="bar-ac3" style="width: 27.2%;"></div></div>
+                </div>
+
+                <div class="format-bar-row" data-format-id="mp3-320">
+                  <div class="format-bar-meta">
+                    <span class="format-bar-name">MP3 — MPEG Camada 3 (320 kbps)</span>
+                    <div class="format-bar-stats">
+                      <span class="format-bar-rate" id="rate-mp3-320">40.000 bytes/s (320 kbps)</span>
+                      <span class="format-bar-size" id="size-mp3-320">2.29 MB</span>
+                    </div>
+                  </div>
+                  <div class="format-bar-track"><div class="format-bar-fill format-bar-fill--blue" id="bar-mp3-320" style="width: 22.7%;"></div></div>
+                </div>
+
+                <div class="format-bar-row" data-format-id="mp3-128">
+                  <div class="format-bar-meta">
+                    <span class="format-bar-name">MP3 — MPEG Camada 3 (128 kbps)</span>
+                    <div class="format-bar-stats">
+                      <span class="format-bar-rate" id="rate-mp3-128">16.000 bytes/s (128 kbps)</span>
+                      <span class="format-bar-size" id="size-mp3-128">0.92 MB</span>
+                    </div>
+                  </div>
+                  <div class="format-bar-track"><div class="format-bar-fill format-bar-fill--blue" id="bar-mp3-128" style="width: 9.1%;"></div></div>
+                </div>
+
+                <div class="format-bar-row" data-format-id="mp3-96">
+                  <div class="format-bar-meta">
+                    <span class="format-bar-name">MP3 — MPEG Camada 3 (96 kbps)</span>
+                    <div class="format-bar-stats">
+                      <span class="format-bar-rate" id="rate-mp3-96">12.000 bytes/s (96 kbps)</span>
+                      <span class="format-bar-size" id="size-mp3-96">0.69 MB</span>
+                    </div>
+                  </div>
+                  <div class="format-bar-track"><div class="format-bar-fill format-bar-fill--blue" id="bar-mp3-96" style="width: 6.8%;"></div></div>
+                </div>
+
+                <div class="format-bar-row" data-format-id="opus">
+                  <div class="format-bar-meta">
+                    <span class="format-bar-name">Opus (64 kbps)</span>
+                    <div class="format-bar-stats">
+                      <span class="format-bar-rate" id="rate-opus">8.000 bytes/s (64 kbps)</span>
+                      <span class="format-bar-size" id="size-opus">0.46 MB</span>
+                    </div>
+                  </div>
+                  <div class="format-bar-track"><div class="format-bar-fill" id="bar-opus" style="width: 4.5%;"></div></div>
+                </div>
+
+                <div class="format-bar-row" data-format-id="pcm-voice">
+                  <div class="format-bar-meta">
+                    <span class="format-bar-name">Voz Telefônica PCM (8 kHz, 8-bit)</span>
+                    <div class="format-bar-stats">
+                      <span class="format-bar-rate" id="rate-pcm-voice">8.000 bytes/s (64 kbps)</span>
+                      <span class="format-bar-size" id="size-pcm-voice">0.46 MB</span>
+                    </div>
+                  </div>
+                  <div class="format-bar-track"><div class="format-bar-fill format-bar-fill--blue" id="bar-pcm-voice" style="width: 4.5%;"></div></div>
+                </div>
+
+                <div class="format-bar-row" data-format-id="midi">
+                  <div class="format-bar-meta">
+                    <span class="format-bar-name">MIDI (.mid — Eventos musicais)</span>
+                    <div class="format-bar-stats">
+                      <span class="format-bar-rate" id="rate-midi">~200 bytes/s (~1.6 kbps)</span>
+                      <span class="format-bar-size" id="size-midi">11.7 KB</span>
+                    </div>
+                  </div>
+                  <div class="format-bar-track"><div class="format-bar-fill" id="bar-midi" style="width: 1%;"></div></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Tabela Comparativa de Algoritmos -->
+            <section class="surface-panel" aria-label="Tabela comparativa de algoritmos e codecs">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">Comparação de Algoritmos e Codecs</h2>
+              </div>
+              <div class="table-wrap">
+                <table class="tech-table">
+                  <thead>
+                    <tr>
+                      <th>Algoritmo / Formato</th>
+                      <th>Débito (kbps)</th>
+                      <th>Perfil / Qualidade</th>
+                      <th>Aplicação / Ano</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mono text-primary">PCM (WAV/AIFF)</td>
+                      <td class="num-cell">64 – 1.411,2</td>
+                      <td>Sem compressão</td>
+                      <td>Telefonia, CD, DAT</td>
+                    </tr>
+                    <tr>
+                      <td class="mono text-primary">ADPCM</td>
+                      <td class="num-cell">16 – 64</td>
+                      <td>Codificação diferencial adaptativa</td>
+                      <td>Voz digital, telecom</td>
+                    </tr>
+                    <tr>
+                      <td class="mono text-primary">FLAC</td>
+                      <td class="num-cell">~650 – 1.000</td>
+                      <td>Lossless (reconstrução bit-a-bit)</td>
+                      <td>Estúdio, arquivamento (2001)</td>
+                    </tr>
+                    <tr>
+                      <td class="mono text-primary">MPEG Camada 1</td>
+                      <td class="num-cell">32 – 448</td>
+                      <td>Boa a 192 kbps/canal</td>
+                      <td>DCC (1991)</td>
+                    </tr>
+                    <tr>
+                      <td class="mono text-primary">MPEG Camada 2</td>
+                      <td class="num-cell">32 – 384</td>
+                      <td>Boa a 256 kbps/canal</td>
+                      <td>DAB, CD-I, DVD (1991)</td>
+                    </tr>
+                    <tr>
+                      <td class="mono text-primary">MPEG Camada 3 (MP3)</td>
+                      <td class="num-cell">32 – 320</td>
+                      <td>Boa a 96 kbps/canal</td>
+                      <td>Web, distribuição (1993)</td>
+                    </tr>
+                    <tr>
+                      <td class="mono text-primary">AC-3 Dolby</td>
+                      <td class="num-cell">32 – 640</td>
+                      <td>Boa a 384 kbps / 5.1 canais</td>
+                      <td>HDTV, Cabo, DVD (1991)</td>
+                    </tr>
+                    <tr>
+                      <td class="mono text-primary">Opus</td>
+                      <td class="num-cell">6 – 510</td>
+                      <td>Alta eficiência e baixa latência</td>
+                      <td>WebRTC, streaming (2012)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <!-- COLUNA DIREITA: INSPETOR CONTÍNUO DOS 4 PRINCÍPIOS DE COMPRESSÃO -->
+          <aside class="workbench-inspector" aria-label="Princípios de compressão de áudio">
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Redundância Estatística</h2>
+              <p class="inspector-text">
+                Explora a frequência estatística dos valores de amostra atribuindo códigos entrópicos de tamanho variável (como Huffman e Rice) para compactar padrões recorrentes sem perda de informação.
+              </p>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Redundância Temporal (Inter-amostra)</h2>
+              <p class="inspector-text">
+                Aproveita a forte correlação entre amostras vizinhas no tempo, armazenando diferenças ou resíduos de predição linear em vez de valores absolutos (usado em ADPCM e FLAC).
+              </p>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Redundância do Conhecimento</h2>
+              <p class="inspector-text">
+                Explora conhecimento prévio partilhado entre codificador e decodificador (como modelos do trato vocal), permitindo taxas de <span class="mono text-primary">8–12 kbps</span> em telefonia celular.
+              </p>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Sistema Humano de Audição (Psicoacústica)</h2>
+              <p class="inspector-text">
+                Descarta componentes mascarados ou inaudíveis ao ouvido humano para elevar a qualidade subjetiva por bit — fundamento de codecs com perdas como MP3, AC-3 e Opus.
+              </p>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Referências Quantitativas</h2>
+              <div class="formula-box" style="margin-top: 0;">
+                <div class="formula-line">
+                  <span class="formula-label">1 s de Voz (8 kHz, 8-bit)</span>
+                  <span class="formula-expr">8.000 bytes (64 kbps)</span>
+                </div>
+                <div class="formula-line">
+                  <span class="formula-label">1 s CD Estéreo (44.1 kHz, 16-bit)</span>
+                  <span class="formula-expr formula-expr--accent">176.400 bytes</span>
+                </div>
+                <div class="formula-line">
+                  <span class="formula-label">Taxa CD (por canal)</span>
+                  <span class="formula-expr formula-expr--blue">705,6 kbps</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Espectrograma: PCM/FLAC vs. Lossy</h2>
+              <figure class="studio-figure" data-raster-figure data-figure-title="Espectrograma Comparativo de Formatos">
+                <div class="studio-figure-frame">
+                  <div class="studio-figure-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span class="mono text-xs text-muted">assets/imagens/compressao_espectrograma.png</span>
+                  </div>
+                  <img class="studio-figure-img" src="assets/imagens/compressao_espectrograma.png" alt="Espectrograma ilustrando preservação de altas frequências em WAV/FLAC comparado ao corte espectral em MP3" hidden>
+                </div>
+                <figcaption class="studio-figure-caption">
+                  <span>Comparação espectral de corte em altas frequências</span>
+                  <span class="mono text-xs text-muted">PNG</span>
+                </figcaption>
+              </figure>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           AMBIENTE: PROCESSAMENTO, SÍNTESE, MIDI & VOZ
+           ==================================================================== -->
+      <section class="env-panel" id="panel-sintese-midi-voz" role="tabpanel" aria-labelledby="title-sintese-midi-voz">
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="title-sintese-midi-voz">Processamento, Síntese, MIDI &amp; Voz</h1>
+            <p class="panel-lead">Equalização gráfica com FFT de vogais, sequenciador Piano Roll (FM vs. PCM) e topologia de rede MIDI.</p>
+          </div>
+          <div class="panel-crosslinks">
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="fisica-fourier">Fourier</button>
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="estudio-autoral">Player MIDI Autoral</button>
+          </div>
+        </div>
+
+        <div class="workbench-split">
+          <!-- COLUNA ESQUERDA: EQ/FFT + PIANO ROLL + TOPOLOGIA SVG -->
+          <div class="workbench-stage">
+            <!-- Equalizador 5 Bandas + Analisador FFT -->
+            <section class="surface-panel" id="eqFftModule" aria-label="Equalizador Gráfico de 5 Bandas e Analisador FFT">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">
+                  <span class="led led--idle" id="eqLed"></span>
+                  <span>Equalizador de 5 Bandas &amp; Analisador FFT</span>
+                </h2>
+                <div class="row-wrap">
+                  <button type="button" class="btn btn--ghost btn--xs btn--sample is-selected" id="presetVowelALow" data-vowel-preset="a-low" data-audio-src="assets/audio/vogal_a_registro_grave.wav" aria-pressed="true">Vogal "a" (Grave)</button>
+                  <button type="button" class="btn btn--ghost btn--xs btn--sample" id="presetVowelAHigh" data-vowel-preset="a-high" data-audio-src="assets/audio/vogal_a_registro_agudo.wav" aria-pressed="false">Vogal "a" (Agudo)</button>
+                  <button type="button" class="btn btn--ghost btn--xs btn--sample" id="presetVowelULow" data-vowel-preset="u-low" data-audio-src="assets/audio/vogal_u_registro_grave.wav" aria-pressed="false">Vogal "u" (Grave)</button>
+                  <button type="button" class="btn btn--ghost btn--xs" id="eqResetBtn">Flat</button>
+                  <button type="button" class="btn btn--primary btn--sm" id="eqPlayBtn" data-state="stopped">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,4 20,12 6,20"/></svg>
+                    <span>Reproduzir</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Fonte de áudio gravada pela equipe (TODO_MIDIAS.md) -->
+              <div class="eq-audio-bar">
+                <span class="row-wrap" style="gap: 6px;">
+                  <span class="led led--sm led--idle" id="eqAudioFileLed"></span>
+                  <span>Gravação selecionada:</span>
+                  <span class="mono text-xs text-primary" id="eqAudioFilePath">assets/audio/vogal_a_registro_grave.wav</span>
+                </span>
+                <span class="mono text-xs text-muted" id="eqAudioStatus">Aguardando gravação (ver TODO_MIDIAS.md)</span>
+              </div>
+              <audio id="eqAudioSource" preload="metadata" loop src="assets/audio/vogal_a_registro_grave.wav"></audio>
+
+              <div class="eq-console">
+                <div class="eq-bank" aria-label="Faders do equalizador de 5 bandas">
+                  <div class="eq-band-col">
+                    <span class="eq-db-readout" id="eqVal62">0.0 dB</span>
+                    <div class="eq-slider-slot">
+                      <input type="range" id="eqBand62" class="studio-fader studio-fader-vertical" min="-18" max="18" step="0.5" value="0" aria-label="Ganho em 62 Hz">
+                    </div>
+                    <span class="eq-freq-label">62Hz</span>
+                  </div>
+                  <div class="eq-band-col">
+                    <span class="eq-db-readout" id="eqVal250">0.0 dB</span>
+                    <div class="eq-slider-slot">
+                      <input type="range" id="eqBand250" class="studio-fader studio-fader-vertical" min="-18" max="18" step="0.5" value="0" aria-label="Ganho em 250 Hz">
+                    </div>
+                    <span class="eq-freq-label">250Hz</span>
+                  </div>
+                  <div class="eq-band-col">
+                    <span class="eq-db-readout" id="eqVal1k">0.0 dB</span>
+                    <div class="eq-slider-slot">
+                      <input type="range" id="eqBand1k" class="studio-fader studio-fader-vertical" min="-18" max="18" step="0.5" value="0" aria-label="Ganho em 1 kHz">
+                    </div>
+                    <span class="eq-freq-label">1kHz</span>
+                  </div>
+                  <div class="eq-band-col">
+                    <span class="eq-db-readout" id="eqVal4k">0.0 dB</span>
+                    <div class="eq-slider-slot">
+                      <input type="range" id="eqBand4k" class="studio-fader studio-fader-vertical" min="-18" max="18" step="0.5" value="0" aria-label="Ganho em 4 kHz">
+                    </div>
+                    <span class="eq-freq-label">4kHz</span>
+                  </div>
+                  <div class="eq-band-col">
+                    <span class="eq-db-readout" id="eqVal16k">0.0 dB</span>
+                    <div class="eq-slider-slot">
+                      <input type="range" id="eqBand16k" class="studio-fader studio-fader-vertical" min="-18" max="18" step="0.5" value="0" aria-label="Ganho em 16 kHz">
+                    </div>
+                    <span class="eq-freq-label">16kHz</span>
+                  </div>
+                </div>
+
+                <div class="scope-frame">
+                  <div class="scope-meta">
+                    <span>Espectro FFT (2048 pts)</span>
+                    <div class="row-wrap">
+                      <span class="readout-chip">Pico <strong id="fftProminentFreq">593 Hz (D5)</strong></span>
+                      <span class="readout-chip">Nível <strong id="fftProminentDb">-16.0 dB</strong></span>
+                    </div>
+                  </div>
+                  <canvas id="fftCanvas" class="scope-canvas" width="680" height="210" aria-label="Analisador espectral FFT em tempo real"></canvas>
+                </div>
+              </div>
+            </section>
+
+            <!-- Mini Sequenciador Piano Roll MIDI -->
+            <section class="surface-panel" id="midiSequencerModule" aria-label="Mini Sequenciador Piano Roll MIDI">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">
+                  <span class="led led--idle" id="midiSeqLed"></span>
+                  <span>Mini Sequenciador Piano Roll MIDI</span>
+                </h2>
+                <div class="row-wrap">
+                  <div class="segmented-control" id="midiEngineToggle" role="radiogroup" aria-label="Motor de síntese MIDI">
+                    <button type="button" class="segmented-btn is-selected" id="midiEngineFM" data-engine="fm" role="radio" aria-checked="true">Síntese FM</button>
+                    <button type="button" class="segmented-btn" id="midiEnginePCM" data-engine="pcm" role="radio" aria-checked="false">Síntese PCM</button>
+                  </div>
+                  <div class="row-wrap" style="gap: 6px;">
+                    <label class="text-xs text-muted" for="midiBpmSlider">BPM</label>
+                    <input type="range" id="midiBpmSlider" class="studio-fader" style="width: 84px;" min="70" max="160" step="2" value="120" data-unit="BPM">
+                    <span class="mono text-xs text-primary" id="midiBpmVal">120 BPM</span>
+                  </div>
+                  <button type="button" class="btn btn--ghost btn--xs" id="midiDemoBtn">Demo</button>
+                  <button type="button" class="btn btn--ghost btn--xs" id="midiClearBtn">Limpar</button>
+                  <button type="button" class="btn btn--primary btn--sm" id="midiPlayBtn" data-state="stopped">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,4 20,12 6,20"/></svg>
+                    <span>Play / Stop</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="sequencer-layout">
+                <div class="piano-roll-wrap">
+                  <div class="piano-roll-grid" id="pianoRollGrid" data-steps="16" aria-label="Grade interativa de notas do Piano Roll">
+                    <div class="pr-step-header">Nota</div>
+                    <div class="pr-step-header is-beat">01</div><div class="pr-step-header">02</div><div class="pr-step-header">03</div><div class="pr-step-header">04</div>
+                    <div class="pr-step-header is-beat">05</div><div class="pr-step-header">06</div><div class="pr-step-header">07</div><div class="pr-step-header">08</div>
+                    <div class="pr-step-header is-beat">09</div><div class="pr-step-header">10</div><div class="pr-step-header">11</div><div class="pr-step-header">12</div>
+                    <div class="pr-step-header is-beat">13</div><div class="pr-step-header">14</div><div class="pr-step-header">15</div><div class="pr-step-header">16</div>
+                  </div>
+                </div>
+
+                <div class="event-list-wrap">
+                  <div class="event-list-head">
+                    <span>Event List</span>
+                    <span class="mono text-xs text-muted" id="midiEventCount">4 eventos</span>
+                  </div>
+                  <div class="event-list-scroll">
+                    <table class="tech-table" id="midiEventListTable">
+                      <thead>
+                        <tr>
+                          <th>Trk</th>
+                          <th>Tick</th>
+                          <th>Chn</th>
+                          <th>Nota</th>
+                          <th>Velocity</th>
+                        </tr>
+                      </thead>
+                      <tbody id="midiEventListBody">
+                        <tr><td class="num-cell">1</td><td class="num-cell">1:1:000</td><td class="num-cell">1</td><td class="mono text-accent">C4</td><td class="num-cell">100</td></tr>
+                        <tr><td class="num-cell">1</td><td class="num-cell">1:2:000</td><td class="num-cell">1</td><td class="mono text-accent">E4</td><td class="num-cell">96</td></tr>
+                        <tr><td class="num-cell">1</td><td class="num-cell">1:3:000</td><td class="num-cell">1</td><td class="mono text-accent">G4</td><td class="num-cell">104</td></tr>
+                        <tr><td class="num-cell">1</td><td class="num-cell">1:4:000</td><td class="num-cell">1</td><td class="mono text-accent">C5</td><td class="num-cell">112</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Topologia de Rede MIDI SVG Inline -->
+            <section class="surface-panel" aria-label="Diagrama da Topologia de Rede MIDI">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">Topologia de Rede MIDI (16 Canais — IN, OUT, THRU)</h2>
+                <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="midi">Ampliar SVG</button>
+              </div>
+              <div class="svg-stage">
+                <svg id="midiTopologySvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 315" role="img" aria-label="Diagrama da topologia de rede MIDI mostrando portas IN, OUT e THRU">
+                  <defs>
+                    <marker id="mArrG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#FF5500"/>
+                    </marker>
+                    <marker id="mArrC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38BDF8"/>
+                    </marker>
+                    <marker id="mArrA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#A1A1AA"/>
+                    </marker>
+                  </defs>
+                  <rect x="0" y="0" width="920" height="315" rx="6" fill="#09090B"/>
+
+                  <!-- DAW -->
+                  <rect x="196" y="20" width="124" height="54" rx="5" fill="#111114" stroke="#323238" stroke-width="1.4"/>
+                  <rect x="208" y="29" width="100" height="34" rx="3" fill="#09090B" stroke="#222226"/>
+                  <rect x="216" y="37" width="20" height="4" fill="#FF5500"/>
+                  <rect x="242" y="45" width="24" height="4" fill="#38BDF8"/>
+                  <rect x="272" y="40" width="18" height="4" fill="#FF5500"/>
+                  <rect x="174" y="80" width="168" height="32" rx="4" fill="#18181B" stroke="#323238"/>
+                  <text x="258" y="100" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11" font-weight="600">Sequenciador / DAW</text>
+
+                  <!-- Teclado -->
+                  <rect x="40" y="192" width="296" height="92" rx="6" fill="#111114" stroke="#323238" stroke-width="1.4"/>
+                  <text x="188" y="213" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600">Teclado Sintetizador</text>
+                  <g fill="#D4D4D8" stroke="#09090B" stroke-width="1">
+                    <rect x="64" y="226" width="18" height="44" rx="2"/><rect x="82" y="226" width="18" height="44" rx="2"/>
+                    <rect x="100" y="226" width="18" height="44" rx="2"/><rect x="118" y="226" width="18" height="44" rx="2"/>
+                    <rect x="136" y="226" width="18" height="44" rx="2"/><rect x="154" y="226" width="18" height="44" rx="2"/>
+                    <rect x="172" y="226" width="18" height="44" rx="2"/><rect x="190" y="226" width="18" height="44" rx="2"/>
+                    <rect x="208" y="226" width="18" height="44" rx="2"/><rect x="226" y="226" width="18" height="44" rx="2"/>
+                    <rect x="244" y="226" width="18" height="44" rx="2"/><rect x="262" y="226" width="18" height="44" rx="2"/>
+                    <rect x="280" y="226" width="18" height="44" rx="2"/><rect x="298" y="226" width="18" height="44" rx="2"/>
+                  </g>
+                  <g fill="#09090B">
+                    <rect x="76" y="226" width="10" height="26"/><rect x="94" y="226" width="10" height="26"/>
+                    <rect x="130" y="226" width="10" height="26"/><rect x="148" y="226" width="10" height="26"/>
+                    <rect x="166" y="226" width="10" height="26"/><rect x="202" y="226" width="10" height="26"/>
+                    <rect x="220" y="226" width="10" height="26"/><rect x="256" y="226" width="10" height="26"/>
+                    <rect x="274" y="226" width="10" height="26"/><rect x="292" y="226" width="10" height="26"/>
+                  </g>
+                  <rect x="74" y="182" width="34" height="14" rx="3" fill="#09090B" stroke="#FF5500"/><text x="91" y="192" text-anchor="middle" fill="#FF5500" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="600">IN</text>
+                  <rect x="128" y="182" width="38" height="14" rx="3" fill="#09090B" stroke="#38BDF8"/><text x="147" y="192" text-anchor="middle" fill="#38BDF8" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="600">OUT</text>
+                  <rect x="250" y="182" width="46" height="14" rx="3" fill="#09090B" stroke="#A1A1AA"/><text x="273" y="192" text-anchor="middle" fill="#A1A1AA" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="600">THRU</text>
+
+                  <!-- Módulo Sintetizador -->
+                  <rect x="406" y="192" width="178" height="92" rx="6" fill="#111114" stroke="#323238" stroke-width="1.4"/>
+                  <text x="495" y="213" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600">Módulo Sintetizador</text>
+                  <rect x="424" y="228" width="104" height="28" rx="3" fill="#09090B" stroke="#27272A"/>
+                  <text x="434" y="246" fill="#FF5500" font-family="'JetBrains Mono', monospace" font-size="9.5">CH 02: PIANO</text>
+                  <circle cx="554" cy="242" r="11" fill="#09090B" stroke="#52525B" stroke-width="1.4"/>
+                  <line x1="554" y1="242" x2="560" y2="234" stroke="#FF5500" stroke-width="1.8"/>
+                  <rect x="424" y="182" width="34" height="14" rx="3" fill="#09090B" stroke="#A1A1AA"/><text x="441" y="192" text-anchor="middle" fill="#A1A1AA" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="600">IN</text>
+                  <rect x="476" y="182" width="38" height="14" rx="3" fill="#09090B" stroke="#323238"/><text x="495" y="192" text-anchor="middle" fill="#71717A" font-family="'JetBrains Mono', monospace" font-size="8.5">OUT</text>
+                  <rect x="526" y="182" width="46" height="14" rx="3" fill="#09090B" stroke="#A1A1AA"/><text x="549" y="192" text-anchor="middle" fill="#A1A1AA" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="600">THRU</text>
+
+                  <!-- Módulo de Efeitos -->
+                  <rect x="652" y="192" width="186" height="92" rx="6" fill="#111114" stroke="#323238" stroke-width="1.4"/>
+                  <text x="745" y="213" text-anchor="middle" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600">Módulo de Efeitos</text>
+                  <rect x="670" y="228" width="76" height="38" rx="3" fill="#09090B" stroke="#222226"/>
+                  <rect x="678" y="236" width="58" height="4" fill="#FF5500"/><rect x="678" y="245" width="42" height="4" fill="#38BDF8"/><rect x="678" y="254" width="50" height="4" fill="#71717A"/>
+                  <circle cx="776" cy="247" r="10" fill="#09090B" stroke="#52525B" stroke-width="1.4"/>
+                  <circle cx="808" cy="247" r="10" fill="#09090B" stroke="#52525B" stroke-width="1.4"/>
+                  <rect x="668" y="182" width="34" height="14" rx="3" fill="#09090B" stroke="#A1A1AA"/><text x="685" y="192" text-anchor="middle" fill="#A1A1AA" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="600">IN</text>
+                  <rect x="720" y="182" width="38" height="14" rx="3" fill="#09090B" stroke="#323238"/><text x="739" y="192" text-anchor="middle" fill="#71717A" font-family="'JetBrains Mono', monospace" font-size="8.5">OUT</text>
+                  <rect x="772" y="182" width="46" height="14" rx="3" fill="#09090B" stroke="#A1A1AA"/><text x="795" y="192" text-anchor="middle" fill="#A1A1AA" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="600">THRU</text>
+
+                  <!-- Cabos -->
+                  <polyline points="174,92 91,92 91,176" fill="none" stroke="#FF5500" stroke-width="1.8" marker-end="url(#mArrG)"/>
+                  <polyline points="147,182 147,104 168,104" fill="none" stroke="#38BDF8" stroke-width="1.8" marker-end="url(#mArrC)"/>
+                  <polyline points="273,182 273,144 441,144 441,176" fill="none" stroke="#A1A1AA" stroke-width="1.8" marker-end="url(#mArrA)"/>
+                  <polyline points="549,182 549,144 685,144 685,176" fill="none" stroke="#A1A1AA" stroke-width="1.8" marker-end="url(#mArrA)"/>
+                  <polyline points="795,182 795,144 892,144" fill="none" stroke="#A1A1AA" stroke-width="1.8" stroke-dasharray="5 3" marker-end="url(#mArrA)"/>
+
+                  <!-- Conector DIN-5 -->
+                  <rect x="652" y="20" width="236" height="90" rx="6" fill="#111114" stroke="#222226"/>
+                  <text x="668" y="40" fill="#F4F4F5" font-family="'Inter', sans-serif" font-size="11" font-weight="600">Conector DIN 5 Pinos</text>
+                  <circle cx="698" cy="76" r="20" fill="#09090B" stroke="#52525B" stroke-width="1.8"/>
+                  <circle cx="684" cy="76" r="2.2" fill="#71717A"/><circle cx="689" cy="67" r="2.2" fill="#FF5500"/>
+                  <circle cx="698" cy="63" r="2.2" fill="#38BDF8"/><circle cx="707" cy="67" r="2.2" fill="#FF5500"/>
+                  <circle cx="712" cy="76" r="2.2" fill="#71717A"/>
+                  <text x="734" y="66" fill="#A1A1AA" font-family="'JetBrains Mono', monospace" font-size="9">31.25 kbps</text>
+                  <text x="734" y="81" fill="#A1A1AA" font-family="'JetBrains Mono', monospace" font-size="9">16 canais / porta</text>
+                  <text x="734" y="96" fill="#71717A" font-family="'Inter', sans-serif" font-size="9">Apenas eventos</text>
+                </svg>
+              </div>
+            </section>
+          </div>
+
+          <!-- COLUNA DIREITA: INSPETOR TEÓRICO CONTÍNUO -->
+          <aside class="workbench-inspector" aria-label="Inspetor teórico de Processamento, Síntese, MIDI e Voz">
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Domínio do Tempo vs. Frequência</h2>
+              <ul class="inspector-list">
+                <li><strong>Domínio do Tempo:</strong> operações sobre amostras individuais (armazenar, cortar, copiar, colar, realçar, atenuar e mixar).</li>
+                <li><strong>Domínio da Frequência:</strong> análise de sequências de amostras via FFT (filtragem digital, recuperação de áudio, ajustes de duração/altura, síntese e reconhecimento de voz).</li>
+              </ul>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Síntese FM vs. Síntese PCM</h2>
+              <div class="table-wrap">
+                <table class="tech-table">
+                  <thead>
+                    <tr>
+                      <th>Critério</th>
+                      <th>FM</th>
+                      <th>PCM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Base em prop. físicas</td><td class="mono">Não</td><td class="mono">Sim</td></tr>
+                    <tr><td>Imitação acústica</td><td class="mono">Fraca</td><td class="mono">Boa</td></tr>
+                    <tr><td>Custo</td><td class="mono">Baixo</td><td class="mono">Médio</td></tr>
+                    <tr><td>Controle de timbres</td><td class="mono">Flexível</td><td class="mono">Inflexível</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="inspector-text mt-sm">
+                <strong>Samplers</strong> reproduzem memórias de amostras, bancos de sons e SoundFonts gravados de instrumentos reais. Efeitos espaciais simulam ambientes tridimensionais.
+              </p>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Protocolo e Arquivos MIDI</h2>
+              <ul class="inspector-list">
+                <li>Padrão de eventos musicais, rede em série (<strong>16 canais simultâneos</strong> via portas <code>IN</code>, <code>OUT</code> e <code>THRU</code>) e formato de arquivo (<code>.mid</code>).</li>
+                <li><strong>Vantagens:</strong> tamanho muito menor que WAV, expressão musical precisa, troca livre de timbres e baixo custo computacional.</li>
+                <li><strong>Limitações:</strong> inadequado para voz/efeitos reais e dependente do sintetizador empregado.</li>
+              </ul>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Processamento de Voz</h2>
+              <ul class="inspector-list">
+                <li><strong>Síntese:</strong> <span class="mono text-primary">Texto &rarr; Fonemas &rarr; Áudio</span> (desafios: idioma, coarticulação entre fonemas e inflexões).</li>
+                <li><strong>Reconhecimento:</strong> <span class="mono text-primary">Áudio &rarr; Fonemas &rarr; Palavras &rarr; Comandos</span> (desafios: vocabulário amplo, fala contínua, locutores distintos e ruído).</li>
+                <li><strong>Espectros de Vogais:</strong> a vogal <em>"u"</em> em registro grave concentra energia abaixo de <span class="mono">800 Hz</span> (pico ~<span class="mono">172 Hz</span>), enquanto <em>"a"</em> irradia harmônicos até <span class="mono">3 kHz</span> (mais espaçados em registros agudos devido à fundamental mais alta).</li>
+              </ul>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Sequenciador MIDI na Prática</h2>
+              <figure class="studio-figure" data-raster-figure data-figure-title="Sequenciador MIDI / Controlador">
+                <div class="studio-figure-frame">
+                  <div class="studio-figure-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span class="mono text-xs text-muted">assets/imagens/midi_sequenciador_daw.png</span>
+                  </div>
+                  <img class="studio-figure-img" src="assets/imagens/midi_sequenciador_daw.png" alt="Captura de tela do sequenciador MIDI e piano roll da composição autoral" hidden>
+                </div>
+                <figcaption class="studio-figure-caption">
+                  <span>Piano roll / trilhas MIDI no editor (LMMS / MuseScore)</span>
+                  <span class="mono text-xs text-muted">PNG</span>
+                </figcaption>
+              </figure>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           AMBIENTE: ESTÚDIO AUTORAL (PRODUÇÃO DA EQUIPE)
+           ==================================================================== -->
+      <section class="env-panel" id="panel-estudio-autoral" role="tabpanel" aria-labelledby="title-estudio-autoral">
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="title-estudio-autoral">Estúdio Autoral</h1>
+            <p class="panel-lead">Produção original de áudio digitalizado (bruto vs. tratado), vídeo demonstrativo, composição MIDI e animações da equipe.</p>
+          </div>
+          <div class="panel-crosslinks">
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="sintese-midi-voz">Equalizador &amp; MIDI</button>
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="quiz-interativo">Ir para o Quiz</button>
+          </div>
+        </div>
+
+        <div class="workbench-split">
+          <!-- COLUNA ESQUERDA: ÁUDIO A/B + VÍDEO DIGITAL -->
+          <div class="workbench-stage">
+            <!-- Áudio Digitalizado A/B -->
+            <section class="surface-panel" id="mediaAudioAB" aria-label="Comparador A/B de Áudio Digitalizado">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">
+                  <span class="led led--idle" id="abAudioLed"></span>
+                  <span>Áudio Digitalizado — Comparador A/B</span>
+                </h2>
+                <div class="row-wrap">
+                  <span class="mono text-xs text-secondary" id="abTimeDisplay">00:00 / 00:00</span>
+                  <button type="button" class="btn btn--primary btn--sm" id="abPlayBtn" data-state="stopped">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,4 20,12 6,20"/></svg>
+                    <span>Play / Pause</span>
+                  </button>
+                  <button type="button" class="btn btn--ghost btn--sm" id="abStopBtn">Stop</button>
+                </div>
+              </div>
+
+              <div class="row-between">
+                <div class="segmented-control" id="abSwitchGroup" role="radiogroup" aria-label="Selecionar faixa A ou B">
+                  <button type="button" class="segmented-btn is-selected" id="abSelectRaw" data-ab-mode="raw" role="radio" aria-checked="true">A: Áudio Bruto (Sem Tratamento)</button>
+                  <button type="button" class="segmented-btn" id="abSelectTreated" data-ab-mode="treated" role="radio" aria-checked="false">B: Áudio Tratado (Limpeza + EQ + Norm.)</button>
+                </div>
+                <span class="mono text-xs text-muted" id="abFileStatus">Ver TODO_MIDIAS.md</span>
+              </div>
+
+              <div class="scope-frame mt-sm">
+                <div class="scope-meta">
+                  <span class="row-wrap" style="gap: 6px;">
+                    <span class="led led--sm led--accent" id="abModeLed"></span>
+                    <span id="abActiveTrackLabel">Monitorando: A — Áudio Bruto</span>
+                  </span>
+                </div>
+                <canvas id="abWaveformCanvas" class="scope-canvas scope-canvas--compact" width="760" height="112" aria-label="Forma de onda do comparador A/B de áudio"></canvas>
+              </div>
+
+              <audio id="audioRawSource" preload="metadata" src="assets/audio/voz_bruta_original.wav"></audio>
+              <audio id="audioTreatedSource" preload="metadata" src="assets/audio/voz_tratada_master.wav"></audio>
+            </section>
+
+            <!-- Vídeo Digital -->
+            <section class="surface-panel" id="mediaVideoPlayer" aria-label="Player de Vídeo Demonstrativo">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">Vídeo Digital — Demonstração da Equipe</h2>
+                <span class="mono text-xs text-muted">MP4 / H.264</span>
+              </div>
+
+              <div class="video-chassis">
+                <video id="studioDemoVideo" class="studio-video" controls preload="metadata" poster="assets/imagens/poster_video.png">
+                  <source src="assets/video/demonstracao_tratamento.mp4" type="video/mp4">
+                  Seu navegador não suporta reprodução de vídeo HTML5.
+                </video>
+                <div class="media-status-bar">
+                  <span class="row-wrap" style="gap: 6px;">
+                    <span class="led led--sm led--idle" id="videoStatusLed"></span>
+                    <span id="videoStatusBadge">Aguardando assets/video/demonstracao_tratamento.mp4</span>
+                  </span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- COLUNA DIREITA: MIDI + FOTO PRODUÇÃO + VETORIAIS + ANIMAÇÃO -->
+          <aside class="workbench-inspector" aria-label="Produção MIDI, registros fotográficos, vetores e animação">
+            <!-- Música MIDI (.mid) -->
+            <section class="inspector-section" id="mediaMidiPlayer">
+              <div class="row-between" style="margin-bottom: 10px;">
+                <h2 class="inspector-heading mb-0" style="display: flex; align-items: center; gap: 7px;">
+                  <span class="led led--sm led--idle" id="studioMidiLed"></span>
+                  <span>Música MIDI (.mid)</span>
+                </h2>
+                <span class="mono text-xs text-muted" id="studioMidiStatus">Aguardando .mid</span>
+              </div>
+              <p class="mono text-xs text-secondary" id="studioMidiFilePath" style="margin-bottom: 6px;">assets/midi/composicao_autoral.mid</p>
+              <p class="text-xs text-muted" id="studioMidiMeta" style="margin-bottom: 10px;">Composição original da equipe (LMMS / MuseScore).</p>
+
+              <div id="studioMidiHost" class="scope-frame">
+                <div class="row-wrap">
+                  <button type="button" class="btn btn--primary btn--xs" id="studioMidiPlayBtn" data-state="stopped">Reproduzir</button>
+                  <button type="button" class="btn btn--ghost btn--xs" id="studioMidiStopBtn">Stop</button>
+                </div>
+                <div class="quiz-progress-track" style="margin: 10px 0 2px;">
+                  <div class="quiz-progress-fill" id="studioMidiProgress" style="width: 0%;"></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Registro Fotográfico da Bancada (Imagem Matricial) -->
+            <section class="inspector-section" id="mediaStudioPhoto">
+              <h2 class="inspector-heading">Bancada de Produção</h2>
+              <figure class="studio-figure" data-raster-figure data-figure-title="Ambiente de Gravação e Edição da Equipe">
+                <div class="studio-figure-frame studio-figure-frame--wide">
+                  <div class="studio-figure-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span class="mono text-xs text-muted">assets/imagens/estudio_bancada.png</span>
+                  </div>
+                  <img class="studio-figure-img" src="assets/imagens/estudio_bancada.png" alt="Foto do ambiente de gravação e edição utilizado pela equipe" hidden>
+                </div>
+                <figcaption class="studio-figure-caption">
+                  <span>Setup de gravação e edição da equipe</span>
+                  <span class="mono text-xs text-muted">PNG</span>
+                </figcaption>
+              </figure>
+            </section>
+
+            <!-- Imagens Vetoriais (SVG) -->
+            <section class="inspector-section" id="mediaSvgGallery">
+              <h2 class="inspector-heading">Diagramas Vetoriais Fonte (SVG)</h2>
+              <div class="stack-sm">
+                <div class="svg-item-row">
+                  <div class="svg-item-thumb">
+                    <img src="assets/vetores/transdutor_alto_falante.svg" alt="Diagrama vetorial do alto-falante">
+                  </div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div class="text-sm text-primary" style="font-weight: 500;">Transdutor Alto-Falante</div>
+                    <div class="mono text-xs text-muted">transdutor_alto_falante.svg</div>
+                  </div>
+                  <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="transdutor">Abrir</button>
+                </div>
+
+                <div class="svg-item-row">
+                  <div class="svg-item-thumb">
+                    <img src="assets/vetores/cadeia_digitalizacao_pcm.svg" alt="Diagrama vetorial da cadeia PCM">
+                  </div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div class="text-sm text-primary" style="font-weight: 500;">Cadeia Digitalização PCM</div>
+                    <div class="mono text-xs text-muted">cadeia_digitalizacao_pcm.svg</div>
+                  </div>
+                  <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="pcm">Abrir</button>
+                </div>
+
+                <div class="svg-item-row">
+                  <div class="svg-item-thumb">
+                    <img src="assets/vetores/topologia_rede_midi.svg" alt="Diagrama vetorial da rede MIDI">
+                  </div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div class="text-sm text-primary" style="font-weight: 500;">Topologia de Rede MIDI</div>
+                    <div class="mono text-xs text-muted">topologia_rede_midi.svg</div>
+                  </div>
+                  <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="midi">Abrir</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- Animação (Pixel Art CSS + Canvas Procedural) -->
+            <section class="inspector-section" id="mediaAnimationShowcase">
+              <div class="row-between" style="margin-bottom: 10px;">
+                <h2 class="inspector-heading mb-0">Animação (Canvas &amp; Pixel Art)</h2>
+                <div class="row-wrap">
+                  <select id="animModeSelect" class="btn btn--xs" aria-label="Modo de animação procedural">
+                    <option value="lissajous">Lissajous</option>
+                    <option value="standing-wave">Onda Estacionária</option>
+                    <option value="spectrum-bars">Espectro</option>
+                  </select>
+                  <button type="button" class="btn btn--primary btn--xs" id="animToggleBtn" data-state="standby">Ativar</button>
+                </div>
+              </div>
+
+              <div class="pixel-showcase-box">
+                <div class="pixel-eq-widget" aria-label="Equalizador animado em Pixel Art CSS">
+                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
+                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
+                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
+                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
+                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
+                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
+                </div>
+
+                <svg class="pixel-tape-svg" viewBox="0 0 28 18" xmlns="http://www.w3.org/2000/svg" aria-label="Fita cassete em Pixel Art">
+                  <rect x="1" y="1" width="26" height="16" fill="#18181B" stroke="#323238" stroke-width="1"/>
+                  <rect x="3" y="3" width="22" height="9" fill="#09090B"/>
+                  <g class="pixel-reel-spin">
+                    <rect x="6" y="5" width="5" height="5" fill="#FF5500"/>
+                    <rect x="8" y="6" width="1" height="3" fill="#09090B"/>
+                    <rect x="7" y="7" width="3" height="1" fill="#09090B"/>
+                  </g>
+                  <g class="pixel-reel-spin">
+                    <rect x="17" y="5" width="5" height="5" fill="#38BDF8"/>
+                    <rect x="19" y="6" width="1" height="3" fill="#09090B"/>
+                    <rect x="18" y="7" width="3" height="1" fill="#09090B"/>
+                  </g>
+                  <rect x="11" y="7" width="6" height="1" fill="#52525B"/>
+                  <rect x="7" y="13" width="14" height="3" fill="#27272A"/>
+                </svg>
+              </div>
+
+              <div class="scope-frame mt-sm">
+                <canvas id="studioAnimCanvas" class="scope-canvas scope-canvas--compact" width="420" height="112" aria-label="Animação procedural de áudio em Canvas"></canvas>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           AMBIENTE: QUIZ INTERATIVO
+           ==================================================================== -->
+      <section class="env-panel" id="panel-quiz-interativo" role="tabpanel" aria-labelledby="title-quiz-interativo">
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="title-quiz-interativo">Quiz Interativo</h1>
+            <p class="panel-lead">Cinco questões sorteadas aleatoriamente por tentativa com justificativa técnica imediata.</p>
+          </div>
+          <span class="readout-chip">Banco <strong id="quizBankCount">25 questões</strong></span>
+        </div>
+
+        <div class="workbench-split">
+          <!-- COLUNA ESQUERDA: ARENA DO QUIZ -->
+          <div class="workbench-stage">
+            <!-- Tela Inicial -->
+            <section class="surface-panel quiz-screen is-visible" id="quizStartScreen" aria-label="Início do Quiz">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">Iniciar Avaliação</h2>
+                <span class="mono text-xs text-muted">data/quiz-questions.json</span>
+              </div>
+              <p class="text-sm text-secondary">
+                A cada tentativa o sistema sorteia <strong>5 perguntas sem repetição</strong> a partir da base de 25 questões cobrindo Física do Som, PCM, Nyquist, Compressão, Formatos, Síntese Musical, MIDI e Voz.
+              </p>
+              <div class="grid-3 mt-sm">
+                <div class="lcd-cell">
+                  <span class="lcd-cell-label">Base Total</span>
+                  <span class="lcd-cell-val">25</span>
+                </div>
+                <div class="lcd-cell">
+                  <span class="lcd-cell-label">Por Tentativa</span>
+                  <span class="lcd-cell-val lcd-cell-val--accent">05</span>
+                </div>
+                <div class="lcd-cell">
+                  <span class="lcd-cell-label">Nota Final</span>
+                  <span class="lcd-cell-val">0% – 100%</span>
+                </div>
+              </div>
+              <div class="mt-md">
+                <button type="button" class="btn btn--primary" id="quizStartBtn">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,4 20,12 6,20"/></svg>
+                  <span>Sortear 5 Questões e Iniciar</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- Tela de Questão Ativa -->
+            <section class="surface-panel quiz-screen" id="quizActiveScreen" aria-label="Questão Atual">
+              <div class="row-between">
+                <span class="text-xs text-secondary" id="quizCategoryTag">Categoria</span>
+                <span class="mono text-sm text-accent" id="quizProgressText">01 / 05</span>
+              </div>
+
+              <div class="quiz-progress-track" id="quizProgressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
+                <div class="quiz-progress-fill" id="quizProgressFill" style="width: 20%;"></div>
+              </div>
+
+              <h2 class="quiz-question-text" id="quizQuestionText">A pergunta sorteada aparecerá aqui.</h2>
+
+              <div class="quiz-options" id="quizOptionsContainer" role="group" aria-label="Alternativas"></div>
+
+              <div class="quiz-feedback-box" id="quizFeedbackBox" hidden role="status" aria-live="polite">
+                <div class="row-between" style="margin-bottom: 4px;">
+                  <strong class="text-sm" id="quizFeedbackTitle">Feedback</strong>
+                  <button type="button" class="btn btn--ghost btn--xs" id="quizReferenceJumpBtn" hidden>Revisar tópico</button>
+                </div>
+                <p class="text-sm text-secondary mb-0" id="quizFeedbackText"></p>
+              </div>
+
+              <div class="row-between mt-md">
+                <span class="text-xs text-muted" id="quizStatusNote">Selecione uma alternativa</span>
+                <button type="button" class="btn btn--primary" id="quizNextBtn" disabled>Próxima Questão</button>
+              </div>
+            </section>
+
+            <!-- Tela de Resultado Final -->
+            <section class="surface-panel quiz-screen" id="quizResultScreen" aria-label="Resultado do Quiz">
+              <div class="panel-bar">
+                <h2 class="panel-bar-title">Resultado Final</h2>
+                <span class="mono text-xs text-accent" id="quizPerformanceBadge">Concluído</span>
+              </div>
+
+              <div class="row-wrap" style="gap: 24px; padding: 10px 0;">
+                <div class="quiz-score-ring">
+                  <span class="quiz-score-percent" id="quizScorePercent">0%</span>
+                  <span class="mono text-xs text-muted" id="quizScoreFraction">0 / 5</span>
+                </div>
+                <div class="stack-sm" style="flex: 1; min-width: 240px;">
+                  <h3 class="inspector-heading mb-0" id="quizResultHeadline">Avaliação concluída</h3>
+                  <p class="text-sm text-secondary mb-0" id="quizResultSummary">Resumo detalhado das questões respondidas abaixo.</p>
+                  <div class="row-wrap mt-sm">
+                    <button type="button" class="btn btn--primary" id="quizRestartBtn">Nova Tentativa</button>
+                    <button type="button" class="btn btn--ghost" data-jump-tab="fisica-fourier">Voltar às Bancadas</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stack-sm mt-md" id="quizReviewList" aria-label="Revisão das respostas"></div>
+            </section>
+          </div>
+
+          <!-- COLUNA DIREITA: INSPETOR DE REVISÃO NÃO-LINEAR -->
+          <aside class="workbench-inspector" aria-label="Guia rápido de revisão">
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Regras da Avaliação</h2>
+              <ul class="inspector-list">
+                <li><strong>Sorteio dinâmico:</strong> 5 questões distintas selecionadas aleatoriamente da base de 25 itens.</li>
+                <li><strong>Feedback imediato:</strong> explicação técnica apresentada logo após cada resposta.</li>
+                <li><strong>Percentual final:</strong> exibição da taxa de acerto (%) ao concluir a rodada.</li>
+              </ul>
+            </div>
+
+            <div class="inspector-section">
+              <h2 class="inspector-heading">Acesso Rápido para Revisão</h2>
+              <div class="stack-sm">
+                <button type="button" class="btn btn--ghost btn--sm" data-jump-tab="fisica-fourier" style="justify-content: flex-start;">Física do Som &amp; Fourier</button>
+                <button type="button" class="btn btn--ghost btn--sm" data-jump-tab="pcm-digitalizacao" style="justify-content: flex-start;">Digitalização &amp; Modulação PCM</button>
+                <button type="button" class="btn btn--ghost btn--sm" data-jump-tab="compressao-formatos" style="justify-content: flex-start;">Compressão &amp; Formatos</button>
+                <button type="button" class="btn btn--ghost btn--sm" data-jump-tab="sintese-midi-voz" style="justify-content: flex-start;">Síntese, MIDI &amp; Voz</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       OVERLAY DE DESCRIÇÃO DE FORMATO (Z-INDEX ELEVADO — FECHA FORA OU NO X)
+       ====================================================================== -->
+  <div class="format-detail-backdrop" id="formatDetailOverlay" role="dialog" aria-modal="true" aria-labelledby="formatDetailTitle" aria-hidden="true">
+    <div class="format-detail-box" id="formatDetailBox">
+      <div class="format-detail-header">
+        <div>
+          <h2 class="format-detail-title" id="formatDetailTitle">Formato</h2>
+          <span class="format-detail-subtitle" id="formatDetailSubtitle">.ext // Categoria</span>
+        </div>
+        <button type="button" class="format-detail-close" id="closeFormatDetailBtn" aria-label="Fechar detalhes do formato">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <p class="format-detail-desc" id="formatDetailDesc"></p>
+      <div class="format-detail-specs">
+        <div class="lcd-cell">
+          <span class="lcd-cell-label">Tipo de Compressão</span>
+          <span class="lcd-cell-val" style="font-size: 0.84rem;" id="formatDetailCompression">—</span>
+        </div>
+        <div class="lcd-cell">
+          <span class="lcd-cell-label">Bitrate / Taxa Típica</span>
+          <span class="lcd-cell-val lcd-cell-val--accent" style="font-size: 0.84rem;" id="formatDetailBitrate">—</span>
+        </div>
+        <div class="lcd-cell">
+          <span class="lcd-cell-label">Princípio / Mecanismo</span>
+          <span class="lcd-cell-val" style="font-size: 0.82rem; font-family: var(--font-sans); font-weight: 500;" id="formatDetailMechanism">—</span>
+        </div>
+        <div class="lcd-cell">
+          <span class="lcd-cell-label">Uso Principal</span>
+          <span class="lcd-cell-val" style="font-size: 0.82rem; font-family: var(--font-sans); font-weight: 500;" id="formatDetailUsage">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL DE IDENTIFICAÇÃO DA EQUIPE E SOBRE
+       ====================================================================== -->
+  <div class="studio-modal-backdrop" id="teamModal" role="dialog" aria-modal="true" aria-labelledby="teamModalTitle" aria-hidden="true">
+    <div class="studio-modal">
+      <div class="modal-header">
+        <div>
+          <span class="text-xs text-muted">Sistemas Multimídia — Protótipo Educacional</span>
+          <h2 class="panel-title" id="teamModalTitle" style="font-size: 1.15rem; margin-top: 2px;">Equipe e Sobre</h2>
+        </div>
+        <button type="button" class="format-detail-close" id="closeTeamModalBtn" aria-label="Fechar modal da equipe">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <p class="text-sm text-secondary">
+        Sistema multimídia educacional com navegação não-linear sobre <strong>Áudio Digital, Música e Voz para Sistemas Multimídia</strong>, contemplando as seis mídias obrigatórias, simuladores interativos e avaliação diagnóstica com 25 questões.
+      </p>
+
+      <h3 class="inspector-heading mt-md">Equipe</h3>
+      <div class="team-roster">
+        <div class="team-member-card">
+          <span class="team-member-name">Bianca</span>
+        </div>
+        <div class="team-member-card">
+          <span class="team-member-name">Carlos</span>
+        </div>
+        <div class="team-member-card">
+          <span class="team-member-name">George</span>
+        </div>
+        <div class="team-member-card">
+          <span class="team-member-name">Giovanna</span>
+        </div>
+        <div class="team-member-card">
+          <span class="team-member-name">Guilherme</span>
+        </div>
+        <div class="team-member-card">
+          <span class="team-member-name">Stefany</span>
+        </div>
+      </div>
+
+      <div class="lcd-cell">
+        <span class="lcd-cell-label">Ferramentas e Tecnologias</span>
+        <span class="text-xs text-secondary">
+          HTML5, CSS3, Vanilla JavaScript (ES6+), Web Audio API, Canvas 2D, SVG vetorial com camadas nomeadas, Reaper/Audacity, LMMS/MuseScore, Photoshop/Krita/Figma e OBS Studio.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL INSPETOR DE DIAGRAMAS VETORIAIS SVG
+       ====================================================================== -->
+  <div class="studio-modal-backdrop" id="svgInspectModal" role="dialog" aria-modal="true" aria-labelledby="svgInspectTitle" aria-hidden="true">
+    <div class="studio-modal studio-modal--wide">
+      <div class="modal-header">
+        <div>
+          <span class="mono text-xs text-muted" id="svgInspectPath">assets/vetores/</span>
+          <h2 class="panel-title" id="svgInspectTitle" style="font-size: 1.1rem; margin-top: 2px;">Inspetor Vetorial SVG</h2>
+        </div>
+        <button type="button" class="format-detail-close" id="closeSvgInspectBtn" aria-label="Fechar inspetor SVG">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="svg-stage" style="padding: 14px;">
+        <img id="svgInspectImg" src="" alt="Visualização ampliada do diagrama SVG" style="width: 100%; height: auto; display: block; border-radius: 4px;">
+      </div>
+
+      <div class="lcd-cell mt-sm">
+        <span class="lcd-cell-label">Camadas &lt;g&gt; organizadas no arquivo</span>
+        <span class="mono text-xs text-secondary" id="svgInspectLayers"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/navigation.js" defer></script>
+  <script src="js/audio-engine.js" defer></script>
+  <script src="js/simulators.js" defer></script>
+</body>
+</html>

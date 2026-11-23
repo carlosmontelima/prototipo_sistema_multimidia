@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 360" width="920" height="360" role="img" aria-labelledby="svg-midi-title svg-midi-desc">
+  <title id="svg-midi-title">Topologia de Rede MIDI — Portas IN, OUT e THRU</title>
+  <desc id="svg-midi-desc">Diagrama tecnico vetorial de uma rede local MIDI em serie conectando computador sequenciador, teclado controlador, modulo sintetizador e processador de efeitos atraves das portas IN, OUT e THRU em 16 canais.</desc>
+
+  <defs>
+    <pattern id="midiGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#182230" stroke-width="0.7"/>
+    </pattern>
+    <marker id="midiArrowGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#00E599"/>
+    </marker>
+    <marker id="midiArrowCyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#00B8D9"/>
+    </marker>
+    <marker id="midiArrowAmber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#F59E0B"/>
+    </marker>
+  </defs>
+
+  <!-- Camada 1: Fundo e Grade -->
+  <g id="layer-bg-grid">
+    <rect x="0" y="0" width="920" height="360" rx="12" fill="#0B0F14"/>
+    <rect x="0" y="0" width="920" height="360" rx="12" fill="url(#midiGrid)"/>
+    <rect x="0.5" y="0.5" width="919" height="359" rx="12" fill="none" stroke="#253142" stroke-width="1"/>
+    <text x="20" y="25" fill="#64748B" font-family="'JetBrains Mono', monospace" font-size="10" letter-spacing="1.4">NETWORK TOPOLOGY // PROTOCOLO MIDI 1.0 (16 CANAIS SIMULTANEOS)</text>
+  </g>
+
+  <!-- Camada 2: Computador / Sequenciador DAW -->
+  <g id="layer-computador-sequenciador">
+    <!-- Monitor -->
+    <rect x="200" y="42" width="116" height="58" rx="6" fill="#11161F" stroke="#00B8D9" stroke-width="1.6"/>
+    <rect x="210" y="50" width="96" height="38" rx="3" fill="#090C10" stroke="#1E293B" stroke-width="1"/>
+    <!-- Mini piano roll na tela -->
+    <rect x="218" y="58" width="18" height="4" fill="#00E599"/>
+    <rect x="240" y="65" width="22" height="4" fill="#00B8D9"/>
+    <rect x="266" y="60" width="14" height="4" fill="#F59E0B"/>
+    <rect x="230" y="74" width="28" height="4" fill="#00E599"/>
+    <!-- Base / Interface MIDI -->
+    <rect x="176" y="106" width="164" height="34" rx="5" fill="#141B26" stroke="#334155" stroke-width="1.5"/>
+    <text x="258" y="127" text-anchor="middle" fill="#F1F5F9" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">SEQUENCIADOR / DAW</text>
+    <!-- Indicadores de porta no host -->
+    <circle cx="194" cy="123" r="3" fill="#00E599"/>
+    <circle cx="322" cy="123" r="3" fill="#00B8D9"/>
+  </g>
+
+  <!-- Camada 3: Teclado Sintetizador / Controlador -->
+  <g id="layer-teclado-sintetizador">
+    <rect x="44" y="220" width="296" height="96" rx="8" fill="#11161F" stroke="#00E599" stroke-width="1.6"/>
+    <text x="192" y="242" text-anchor="middle" fill="#F1F5F9" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">TECLADO SINTETIZADOR</text>
+    <!-- Teclas brancas simplificadas -->
+    <g fill="#CBD5E1" stroke="#0B0F14" stroke-width="1">
+      <rect x="64" y="256" width="18" height="46" rx="2"/>
+      <rect x="82" y="256" width="18" height="46" rx="2"/>
+      <rect x="100" y="256" width="18" height="46" rx="2"/>
+      <rect x="118" y="256" width="18" height="46" rx="2"/>
+      <rect x="136" y="256" width="18" height="46" rx="2"/>
+      <rect x="154" y="256" width="18" height="46" rx="2"/>
+      <rect x="172" y="256" width="18" height="46" rx="2"/>
+      <rect x="190" y="256" width="18" height="46" rx="2"/>
+      <rect x="208" y="256" width="18" height="46" rx="2"/>
+      <rect x="226" y="256" width="18" height="46" rx="2"/>
+      <rect x="244" y="256" width="18" height="46" rx="2"/>
+      <rect x="262" y="256" width="18" height="46" rx="2"/>
+      <rect x="280" y="256" width="18" height="46" rx="2"/>
+      <rect x="298" y="256" width="18" height="46" rx="2"/>
+    </g>
+    <!-- Teclas pretas -->
+    <g fill="#090C10">
+      <rect x="76" y="256" width="11" height="27" rx="1"/>
+      <rect x="94" y="256" width="11" height="27" rx="1"/>
+      <rect x="130" y="256" width="11" height="27" rx="1"/>
+      <rect x="148" y="256" width="11" height="27" rx="1"/>
+      <rect x="166" y="256" width="11" height="27" rx="1"/>
+      <rect x="202" y="256" width="11" height="27" rx="1"/>
+      <rect x="220" y="256" width="11" height="27" rx="1"/>
+      <rect x="256" y="256" width="11" height="27" rx="1"/>
+      <rect x="274" y="256" width="11" height="27" rx="1"/>
+      <rect x="292" y="256" width="11" height="27" rx="1"/>
+    </g>
+    <!-- Portas IN / OUT / THRU -->
+    <rect x="76" y="210" width="34" height="14" rx="3" fill="#090C10" stroke="#00E599" stroke-width="1"/>
+    <text x="93" y="220" text-anchor="middle" fill="#00E599" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700">IN</text>
+    <rect x="130" y="210" width="38" height="14" rx="3" fill="#090C10" stroke="#00B8D9" stroke-width="1"/>
+    <text x="149" y="220" text-anchor="middle" fill="#00B8D9" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700">OUT</text>
+    <rect x="252" y="210" width="46" height="14" rx="3" fill="#090C10" stroke="#F59E0B" stroke-width="1"/>
+    <text x="275" y="220" text-anchor="middle" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700">THRU</text>
+  </g>
+
+  <!-- Camada 4: Modulo Sintetizador (Rack / Sampler) -->
+  <g id="layer-modulo-sintetizador">
+    <rect x="410" y="220" width="176" height="96" rx="8" fill="#11161F" stroke="#F59E0B" stroke-width="1.6"/>
+    <text x="498" y="242" text-anchor="middle" fill="#F1F5F9" font-family="'Space Grotesk', sans-serif" font-size="11.5" font-weight="700">MODULO SINTETIZADOR</text>
+    <!-- Display LCD simulado -->
+    <rect x="428" y="254" width="100" height="28" rx="3" fill="#091512" stroke="#00E599" stroke-width="1"/>
+    <text x="436" y="272" fill="#00E599" font-family="'JetBrains Mono', monospace" font-size="9.5">CH 02: PIANO</text>
+    <!-- Botoes / Knobs -->
+    <circle cx="554" cy="268" r="11" fill="#090C10" stroke="#64748B" stroke-width="1.4"/>
+    <line x1="554" y1="268" x2="560" y2="260" stroke="#F59E0B" stroke-width="1.8"/>
+    <rect x="428" y="290" width="140" height="12" rx="2" fill="#182230"/>
+    <!-- Portas IN / OUT / THRU -->
+    <rect x="426" y="210" width="34" height="14" rx="3" fill="#090C10" stroke="#F59E0B" stroke-width="1"/>
+    <text x="443" y="220" text-anchor="middle" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700">IN</text>
+    <rect x="478" y="210" width="38" height="14" rx="3" fill="#090C10" stroke="#475569" stroke-width="1"/>
+    <text x="497" y="220" text-anchor="middle" fill="#64748B" font-family="'JetBrains Mono', monospace" font-size="8.5">OUT</text>
+    <rect x="528" y="210" width="46" height="14" rx="3" fill="#090C10" stroke="#F59E0B" stroke-width="1"/>
+    <text x="551" y="220" text-anchor="middle" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700">THRU</text>
+  </g>
+
+  <!-- Camada 5: Modulo de Efeitos / Bateria Eletronica -->
+  <g id="layer-modulo-efeitos">
+    <rect x="656" y="220" width="184" height="96" rx="8" fill="#11161F" stroke="#00B8D9" stroke-width="1.6"/>
+    <text x="748" y="242" text-anchor="middle" fill="#F1F5F9" font-family="'Space Grotesk', sans-serif" font-size="11.5" font-weight="700">MODULO DE EFEITOS</text>
+    <!-- Medidores e knobs -->
+    <rect x="674" y="256" width="76" height="40" rx="3" fill="#090C10" stroke="#1E293B" stroke-width="1"/>
+    <rect x="682" y="264" width="60" height="5" fill="#00E599"/>
+    <rect x="682" y="274" width="44" height="5" fill="#00B8D9"/>
+    <rect x="682" y="284" width="52" height="5" fill="#F59E0B"/>
+    <circle cx="778" cy="276" r="10" fill="#090C10" stroke="#64748B" stroke-width="1.4"/>
+    <line x1="778" y1="276" x2="778" y2="268" stroke="#00B8D9" stroke-width="1.8"/>
+    <circle cx="810" cy="276" r="10" fill="#090C10" stroke="#64748B" stroke-width="1.4"/>
+    <line x1="810" y1="276" x2="816" y2="270" stroke="#00E599" stroke-width="1.8"/>
+    <!-- Portas IN / OUT / THRU -->
+    <rect x="672" y="210" width="34" height="14" rx="3" fill="#090C10" stroke="#F59E0B" stroke-width="1"/>
+    <text x="689" y="220" text-anchor="middle" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700">IN</text>
+    <rect x="724" y="210" width="38" height="14" rx="3" fill="#090C10" stroke="#475569" stroke-width="1"/>
+    <text x="743" y="220" text-anchor="middle" fill="#64748B" font-family="'JetBrains Mono', monospace" font-size="8.5">OUT</text>
+    <rect x="776" y="210" width="46" height="14" rx="3" fill="#090C10" stroke="#F59E0B" stroke-width="1"/>
+    <text x="799" y="220" text-anchor="middle" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700">THRU</text>
+  </g>
+
+  <!-- Camada 6: Cabos e Fluxo de Mensagens MIDI -->
+  <g id="layer-cabos-rede-midi">
+    <!-- Host OUT -> Teclado IN -->
+    <polyline points="176,118 93,118 93,204" fill="none" stroke="#00E599" stroke-width="2.2" marker-end="url(#midiArrowGreen)"/>
+    <!-- Teclado OUT -> Host IN -->
+    <polyline points="149,210 149,130 170,130" fill="none" stroke="#00B8D9" stroke-width="2.2" marker-end="url(#midiArrowCyan)"/>
+    <!-- Teclado THRU -> Modulo Sintetizador IN (Daisy-chain) -->
+    <polyline points="275,210 275,168 443,168 443,204" fill="none" stroke="#F59E0B" stroke-width="2.2" marker-end="url(#midiArrowAmber)"/>
+    <!-- Modulo Sintetizador THRU -> Modulo Efeitos IN -->
+    <polyline points="551,210 551,168 689,168 689,204" fill="none" stroke="#F59E0B" stroke-width="2.2" marker-end="url(#midiArrowAmber)"/>
+    <!-- Modulo Efeitos THRU -> Proximo dispositivo -->
+    <polyline points="799,210 799,168 892,168" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-dasharray="5 3" marker-end="url(#midiArrowAmber)"/>
+  </g>
+
+  <!-- Camada 7: Detalhe Conector DIN-5 e Especificacoes -->
+  <g id="layer-conector-din5">
+    <rect x="656" y="42" width="236" height="96" rx="8" fill="#11161F" stroke="#253142" stroke-width="1.2"/>
+    <text x="672" y="62" fill="#00E599" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">CONECTOR DIN 5 PINOS</text>
+    <!-- Icone DIN-5 -->
+    <circle cx="702" cy="98" r="24" fill="#090C10" stroke="#64748B" stroke-width="2"/>
+    <circle cx="686" cy="98" r="2.6" fill="#94A3B8"/>
+    <circle cx="691" cy="87" r="2.6" fill="#00E599"/>
+    <circle cx="702" cy="83" r="2.6" fill="#F59E0B"/>
+    <circle cx="713" cy="87" r="2.6" fill="#00E599"/>
+    <circle cx="718" cy="98" r="2.6" fill="#94A3B8"/>
+    <rect x="698" y="116" width="8" height="4" fill="#475569"/>
+    <!-- Especificacoes -->
+    <text x="742" y="82" fill="#CBD5E1" font-family="'JetBrains Mono', monospace" font-size="9">TAXA: 31.25 kbps</text>
+    <text x="742" y="98" fill="#CBD5E1" font-family="'JetBrains Mono', monospace" font-size="9">CANAIS: 16 / PORTA</text>
+    <text x="742" y="114" fill="#94A3B8" font-family="'JetBrains Mono', monospace" font-size="8.5">EVENTOS (NAO AUDIO)</text>
+  </g>
+
+  <!-- Camada 8: Legenda de Fluxos -->
+  <g id="layer-anotacoes">
+    <line x1="20" y1="336" x2="900" y2="336" stroke="#1E293B" stroke-width="1"/>
+    <circle cx="32" cy="348" r="4" fill="#00E599"/>
+    <text x="42" y="351" fill="#94A3B8" font-family="'JetBrains Mono', monospace" font-size="9">OUT -&gt; IN (ENVIO DE EVENTOS)</text>
+    <circle cx="242" cy="348" r="4" fill="#00B8D9"/>
+    <text x="252" y="351" fill="#94A3B8" font-family="'JetBrains Mono', monospace" font-size="9">RETORNO CONTROLADOR -&gt; DAW</text>
+    <circle cx="468" cy="348" r="4" fill="#F59E0B"/>
+    <text x="478" y="351" fill="#94A3B8" font-family="'JetBrains Mono', monospace" font-size="9">THRU -&gt; IN (REPLICACAO EM SERIE / DAISY-CHAIN)</text>
+  </g>
+</svg>

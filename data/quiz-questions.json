@@ -1,0 +1,390 @@
+{
+  "meta": {
+    "title": "Banco de Questões — Áudio Digital, Música e Voz para Sistemas Multimídia",
+    "version": "1.0.0",
+    "totalQuestions": 25,
+    "questionsPerAttempt": 5,
+    "sources": [
+      "SM_05 - AUDIO_DIGITAL (smm9)",
+      "SM_06 - Música e a Voz (smm10)",
+      "FLAC (Free Lossless Audio Codec)"
+    ]
+  },
+  "questions": [
+    {
+      "id": "q01",
+      "category": "Física do Som & Fourier",
+      "difficulty": "basico",
+      "question": "Como as vibrações sonoras se propagam fisicamente no ar e qual componente converte o sinal elétrico de volta em onda acústica?",
+      "options": [
+        "Propagam-se como ondas eletromagnéticas transversais; a conversão elétrico-acústica é feita por microfones.",
+        "Propagam-se como ondas de pressão atmosférica; a conversão de sinal elétrico para acústico é feita por alto-falantes.",
+        "Propagam-se como pulsos digitais discretos; a conversão é feita exclusivamente por conversores ADC.",
+        "Propagam-se como ondas magnéticas estacionárias; a conversão de elétrico para acústico é feita por amplificadores."
+      ],
+      "correctIndex": 1,
+      "explanation": "O som propaga-se como ondas de pressão atmosférica. Transdutores acústico-elétricos são os microfones, enquanto transdutores elétrico-acústicos são os alto-falantes (bobina móvel acoplada a um cone junto a um ímã permanente).",
+      "referenceTab": "fisica-fourier"
+    },
+    {
+      "id": "q02",
+      "category": "Física do Som & Fourier",
+      "difficulty": "basico",
+      "question": "Qual é a relação física entre a potência de uma vibração sonora e a sua amplitude?",
+      "options": [
+        "A potência é diretamente proporcional à raiz quadrada da amplitude.",
+        "A potência é inversamente proporcional à amplitude.",
+        "A potência é proporcional ao quadrado da amplitude das vibrações (P ∝ A²).",
+        "A potência depende apenas da frequência fundamental e independe da amplitude."
+      ],
+      "correctIndex": 2,
+      "explanation": "Na física acústica, a potência transportada pela onda sonora é proporcional ao quadrado da amplitude das vibrações (P ∝ A²).",
+      "referenceTab": "fisica-fourier"
+    },
+    {
+      "id": "q03",
+      "category": "Física do Som & Fourier",
+      "difficulty": "intermediario",
+      "question": "De acordo com a Análise de Fourier e a Síntese Aditiva, como qualquer forma de onda sonora complexa e periódica pode ser compreendida?",
+      "options": [
+        "Como um conjunto de pulsos quadrados de mesma amplitude e fase fixa.",
+        "Como uma combinação (soma) de ondas senoidais puras de diferentes frequências e amplitudes.",
+        "Apenas como ruído branco filtrado por um equalizador de 5 bandas.",
+        "Como uma sequência de comandos MIDI convertidos por um sampler."
+      ],
+      "correctIndex": 1,
+      "explanation": "A onda senoidal é a forma sonora mais simples (tom puro). Pela Análise de Fourier, qualquer forma complexa pode ser decomposta em soma de senoides harmônicas; o processo inverso chama-se Síntese Aditiva.",
+      "referenceTab": "fisica-fourier"
+    },
+    {
+      "id": "q04",
+      "category": "Física do Som & Fourier",
+      "difficulty": "basico",
+      "question": "Qual é a principal vulnerabilidade da representação puramente analógica do som (sinais elétricos e armazenamento magnético)?",
+      "options": [
+        "Impossibilidade de representar frequências acima de 3.400 Hz.",
+        "Necessidade de quantização obrigatória de 8 bits por amostra.",
+        "Susceptibilidade à contaminação cumulativa por ruído em todas as transformações, cópias e transmissões.",
+        "Incompatibilidade com transdutores de bobina móvel."
+      ],
+      "correctIndex": 2,
+      "explanation": "Sinais analógicos propagados eletricamente ou gravados magneticamente estão sujeitos à contaminação por ruído a cada transformação ou retransmissão, diferentemente de fluxos digitais regeneráveis.",
+      "referenceTab": "fisica-fourier"
+    },
+    {
+      "id": "q05",
+      "category": "Física do Som & Fourier",
+      "difficulty": "intermediario",
+      "question": "Em um transdutor de alto-falante dinâmico, qual fenômeno físico faz o cone oscilar e gerar ondas de pressão sonora?",
+      "options": [
+        "A variação da tensão de áudio na bobina móvel interage com o campo do ímã permanente (polos N/S), produzindo movimento axial no cone.",
+        "O ímã permanente gira em alta rotação ao receber o sinal digital binário.",
+        "A bobina atua como filtro passa-baixas que remove o ruído de quantização do ar.",
+        "O cone aquece o ar ao redor proporcionalmente à taxa de bits do arquivo."
+      ],
+      "correctIndex": 0,
+      "explanation": "A corrente alternada da tensão de áudio percorre a bobina móvel imersa no campo magnético fixo do ímã permanente, gerando força eletromagnética que desloca o cone para frente e para trás.",
+      "referenceTab": "fisica-fourier"
+    },
+    {
+      "id": "q06",
+      "category": "Digitalização & PCM",
+      "difficulty": "basico",
+      "question": "Qual é a ordem correta das quatro etapas fundamentais da modulação PCM no conversor ADC?",
+      "options": [
+        "Quantização → Filtragem → Codificação → Amostragem.",
+        "Filtragem (passa-baixas) → Amostragem (PAM) → Quantização → Codificação binária.",
+        "Amostragem → Codificação → Filtragem → Reconstrução DAC.",
+        "Codificação → Compressão → Amostragem → Filtragem."
+      ],
+      "correctIndex": 1,
+      "explanation": "A cadeia PCM inicia com a filtragem passa-baixas (limitação em banda), seguida pela amostragem no tempo (PAM), aproximação em níveis discretos (quantização) e representação em bits (codificação).",
+      "referenceTab": "pcm-digitalizacao"
+    },
+    {
+      "id": "q07",
+      "category": "Digitalização & PCM",
+      "difficulty": "intermediario",
+      "question": "Na digitalização de sinais de voz em telefonia PCM, qual é a faixa de frequência de interesse garantida pela filtragem inicial e qual percentual de inteligibilidade ela preserva?",
+      "options": [
+        "20 Hz a 20.000 Hz, garantindo 100% da inteligibilidade.",
+        "300 Hz a 3.400 Hz, garantindo cerca de 85% da inteligibilidade do sinal de voz.",
+        "100 Hz a 1.000 Hz, garantindo 50% da inteligibilidade.",
+        "8.000 Hz a 44.100 Hz, garantindo qualidade de CD."
+      ],
+      "correctIndex": 1,
+      "explanation": "Para voz telefônica, o filtro passa-baixas limita o espectro à faixa de 300 Hz a 3.400 Hz, o que assegura aproximadamente 85% da inteligibilidade e permite amostrar a 8.000 Hz.",
+      "referenceTab": "pcm-digitalizacao"
+    },
+    {
+      "id": "q08",
+      "category": "Digitalização & PCM",
+      "difficulty": "basico",
+      "question": "O que estabelece o Teorema da Amostragem (Critério de Nyquist) para que um sinal analógico possa ser reconstruído sem distorção de aliasing?",
+      "options": [
+        "A taxa de amostragem Fa deve ser menor que a frequência máxima do sinal (Fa < Fmax).",
+        "A taxa de amostragem Fa deve ser igual à metade da frequência máxima do sinal.",
+        "A taxa de amostragem Fa deve ser maior ou igual ao dobro da maior frequência presente no sinal (Fa ≥ 2 · Fmax).",
+        "A profundidade de bits deve ser igual ao dobro da taxa de amostragem."
+      ],
+      "correctIndex": 2,
+      "explanation": "Pelo Critério de Nyquist, Fa ≥ 2 · Fmax. Caso Fa seja inferior a 2 · Fmax, ocorre aliasing (sobreposição espectral que cria frequências falsas irrecuperáveis).",
+      "referenceTab": "pcm-digitalizacao"
+    },
+    {
+      "id": "q09",
+      "category": "Digitalização & PCM",
+      "difficulty": "intermediario",
+      "question": "No sistema PCM usado em telefonia com frequência de amostragem Fa = 8.000 Hz, qual é o intervalo de tempo Ta entre duas amostras consecutivas?",
+      "options": [
+        "Ta = 125 microssegundos (125 µs).",
+        "Ta = 8 milissegundos (8 ms).",
+        "Ta = 22,67 microssegundos (22,67 µs).",
+        "Ta = 125 milissegundos (125 ms)."
+      ],
+      "correctIndex": 0,
+      "explanation": "O período de amostragem é o inverso da frequência: Ta = 1 / 8.000 s = 0,000125 s = 125 µs.",
+      "referenceTab": "pcm-digitalizacao"
+    },
+    {
+      "id": "q10",
+      "category": "Digitalização & PCM",
+      "difficulty": "intermediario",
+      "question": "Na etapa de codificação PCM, o número q de níveis de quantização é dado por q = μ^v. Para um sistema binário (μ = 2) com v = 3 bits por amostra, quantos níveis de quantização existem?",
+      "options": [
+        "6 níveis de quantização.",
+        "8 níveis de quantização (de 000 a 111).",
+        "9 níveis de quantização.",
+        "256 níveis de quantização."
+      ],
+      "correctIndex": 1,
+      "explanation": "Com base binária μ = 2 e v = 3 bits, temos q = 2³ = 8 níveis discretos de amplitude (códigos binários de 000 a 111).",
+      "referenceTab": "pcm-digitalizacao"
+    },
+    {
+      "id": "q11",
+      "category": "Digitalização & PCM",
+      "difficulty": "avancado",
+      "question": "Sobre o ruído de quantização em sistemas PCM, qual afirmação é tecnicamente correta?",
+      "options": [
+        "Ele ocorre devido à interferência eletromagnética durante a retransmissão digital do arquivo.",
+        "Ele resulta da aproximação da amplitude contínua da amostra para o nível discreto mais próximo, manifestando-se como erro na recuperação analógica.",
+        "Ele pode ser eliminado completamente reduzindo a quantidade de bits por amostra de 16 para 4.",
+        "Ele só aparece quando o sinal é convertido para o formato MIDI."
+      ],
+      "correctIndex": 1,
+      "explanation": "Sistemas PCM são praticamente invulneráveis ao ruído físico de retransmissão, mas a aproximação de amplitudes infinitas para níveis finitos gera o erro de quantização (εᵢ), percebido como ruído no DAC.",
+      "referenceTab": "pcm-digitalizacao"
+    },
+    {
+      "id": "q12",
+      "category": "Compressão & Formatos",
+      "difficulty": "intermediario",
+      "question": "Quantos bytes ocupa exatamente 1 segundo de música estereofônica com qualidade de CD Áudio (44.100 Hz, 16 bits por amostra, 2 canais) sem compressão?",
+      "options": [
+        "8.000 bytes/s.",
+        "44.100 bytes/s.",
+        "88.200 bytes/s.",
+        "176.400 bytes/s (2 canais × 44.100 amostras × 2 bytes)."
+      ],
+      "correctIndex": 3,
+      "explanation": "Cada amostra de 16 bits ocupa 2 bytes. Em estéreo (2 canais) a 44.100 amostras/s: 2 × 44.100 × 2 = 176.400 bytes/s (equivalente a 1.411,2 kbps, ou 705,6 kbps por canal).",
+      "referenceTab": "compressao-formatos"
+    },
+    {
+      "id": "q13",
+      "category": "Compressão & Formatos",
+      "difficulty": "basico",
+      "question": "Qual taxa de transmissão (Rs) e consumo de armazenamento por segundo correspondem à voz telefônica PCM padrão (8.000 amostras/s, 8 bits/amostra, mono)?",
+      "options": [
+        "Rs = 64 kbps, equivalente a 8.000 bytes por segundo.",
+        "Rs = 128 kbps, equivalente a 16.000 bytes por segundo.",
+        "Rs = 705,6 kbps, equivalente a 88.200 bytes por segundo.",
+        "Rs = 8 kbps, equivalente a 1.000 bytes por segundo."
+      ],
+      "correctIndex": 0,
+      "explanation": "Rs = 8 bits × 8.000 amostras/s = 64.000 bits/s = 64 kbps. Dividindo por 8 bits/byte, obtém-se 8.000 bytes por segundo.",
+      "referenceTab": "compressao-formatos"
+    },
+    {
+      "id": "q14",
+      "category": "Compressão & Formatos",
+      "difficulty": "intermediario",
+      "question": "Quais são os quatro princípios clássicos de compressão de áudio utilizados por codecs digitais?",
+      "options": [
+        "Amostragem, Quantização, Síntese FM e Equalização.",
+        "Redundância Estatística, Redundância Temporal (inter-amostra), Redundância do Conhecimento e Propriedades do Sistema Humano de Audição.",
+        "Filtragem Passa-Altas, Multiplexação MIDI, Modulação AM e Compressão Dinâmica.",
+        "Normalização de Pico, Dithering, Reverberação e Panorâmica Estéreo."
+      ],
+      "correctIndex": 1,
+      "explanation": "Os codecs de áudio exploram redundância estatística, redundância temporal (correlação entre amostras vizinhas), redundância do conhecimento (modelos compartilhados) e psicoacústica (sistema auditivo humano).",
+      "referenceTab": "compressao-formatos"
+    },
+    {
+      "id": "q15",
+      "category": "Compressão & Formatos",
+      "difficulty": "intermediario",
+      "question": "Por que o formato FLAC (Free Lossless Audio Codec) é amplamente adotado para arquivamento de estúdio e streaming de alta fidelidade?",
+      "options": [
+        "Porque descarta frequências acima de 16 kHz usando mascaramento psicoacústico para atingir 64 kbps.",
+        "Porque armazena apenas notas musicais como o MIDI, ocupando poucos kilobytes.",
+        "Porque reduz o tamanho do arquivo PCM/WAV em cerca de 40% a 50% usando predição linear e codificação entrópica, mantendo reconstrução bit-a-bit idêntica ao original (sem perdas).",
+        "Porque é um formato proprietário exclusivo para filmes DVD em 5.1 canais."
+      ],
+      "correctIndex": 2,
+      "explanation": "O FLAC é um codec aberto lossless (sem perdas): aplica predição linear (redundância temporal) e codificação Rice (redundância estatística) para reduzir o tamanho em ~45% sem descartar nenhum bit da forma de onda original.",
+      "referenceTab": "compressao-formatos"
+    },
+    {
+      "id": "q16",
+      "category": "Compressão & Formatos",
+      "difficulty": "avancado",
+      "question": "Ao comparar WAV (PCM), FLAC e MP3 (MPEG Camada 3), qual diferença fundamental existe entre o FLAC e o MP3?",
+      "options": [
+        "O MP3 é lossless e o FLAC é lossy com mascaramento psicoacústico.",
+        "Ambos são formatos sem compressão, diferindo apenas no sistema operacional (Windows vs. Mac).",
+        "O FLAC preserva 100% dos dados originais (compressão sem perdas), enquanto o MP3 aplica compressão com perdas baseada em modelo psicoacústico para atingir taxas muito menores (ex.: 96 a 320 kbps).",
+        "O FLAC só suporta áudio mono de 8 bits, enquanto o MP3 suporta até 16 canais MIDI."
+      ],
+      "correctIndex": 2,
+      "explanation": "FLAC utiliza compressão lossless (sem perda de informação), permitindo restaurar o PCM exato. O MP3 (MPEG Camada 3) usa compressão lossy (psicoacústica), alcançando alta compactação com descarte controlado de informação perceptualmente mascarada.",
+      "referenceTab": "compressao-formatos"
+    },
+    {
+      "id": "q17",
+      "category": "Compressão & Formatos",
+      "difficulty": "intermediario",
+      "question": "Na comparação de algoritmos de codificação de áudio, qual formato foi projetado para 5.1 canais em aplicações de HDTV, Cabo e DVD, com débito entre 32 e 640 kbps (boa qualidade a 384 kbps)?",
+      "options": [
+        "ADPCM (Codificação Diferencial Adaptativa).",
+        "AC-3 Dolby.",
+        "AU (compressão mu-law da Sun).",
+        "MPEG Camada 1."
+      ],
+      "correctIndex": 1,
+      "explanation": "O padrão AC-3 Dolby (disponível desde 1991) opera entre 32 e 640 kbps, oferecendo boa qualidade multicanal a 384 kbps em configuração 5.1 canais para HDTV, cabo e DVD.",
+      "referenceTab": "compressao-formatos"
+    },
+    {
+      "id": "q18",
+      "category": "Processamento, Síntese, MIDI & Voz",
+      "difficulty": "basico",
+      "question": "Qual é a diferença entre processamento digital de som no domínio do tempo e no domínio da frequência?",
+      "options": [
+        "Domínio do tempo opera sobre amostras separadas (cortar, colar, atenuar, mixar); domínio da frequência requer análise de sequências de amostras (filtragem, equalização espectral, síntese e reconhecimento de voz).",
+        "Domínio do tempo só funciona em arquivos MP3; domínio da frequência só funciona em arquivos MIDI.",
+        "Domínio do tempo altera o timbre de instrumentos; domínio da frequência serve apenas para copiar arquivos.",
+        "Não há diferença prática; ambos analisam apenas uma única amostra isolada por vez."
+      ],
+      "correctIndex": 0,
+      "explanation": "Operações no domínio do tempo manipulam amostras individualmente (ganho, corte, mixagem). Operações no domínio da frequência analisam blocos/sequências de amostras (ex.: via FFT) para filtragem, recuperação, síntese e análise de voz.",
+      "referenceTab": "sintese-midi-voz"
+    },
+    {
+      "id": "q19",
+      "category": "Processamento, Síntese, MIDI & Voz",
+      "difficulty": "intermediario",
+      "question": "Comparando Síntese FM e Síntese PCM (amostras) em tempo real, qual conjunto de características corresponde corretamente a cada técnica?",
+      "options": [
+        "Síntese FM: boa imitação acústica e controle inflexível. Síntese PCM: baixo custo e controle flexível.",
+        "Síntese FM: sem fundamento em propriedades físicas, imitação acústica fraca, baixo custo e controle flexível de timbres. Síntese PCM: fundamentada em ondas gravadas reais, boa imitação acústica, custo médio e controle inflexível.",
+        "Ambas possuem imitação acústica fraca e dependem exclusivamente de filtros passa-baixas.",
+        "Síntese PCM não usa memória de amostras; Síntese FM requer bancos de sons gravados em estúdio."
+      ],
+      "correctIndex": 1,
+      "explanation": "A Síntese FM usa modulação de frequência (baixo custo, muito flexível para timbres sintéticos, mas imitação acústica fraca). A Síntese PCM reproduz formas de onda gravadas de instrumentos reais (boa imitação acústica, custo médio, menor flexibilidade de timbre).",
+      "referenceTab": "sintese-midi-voz"
+    },
+    {
+      "id": "q20",
+      "category": "Processamento, Síntese, MIDI & Voz",
+      "difficulty": "basico",
+      "question": "O que são amostradores ('samplers') no contexto de síntese musical digital?",
+      "options": [
+        "Conversores ADC usados exclusivamente para voz telefônica a 8 kHz.",
+        "Dispositivos ou módulos que utilizam memórias de amostras, bancos de sons e fontes de som (SoundFonts) gravadas de instrumentos reais.",
+        "Cabos DIN de 5 pinos usados para interligar caixas acústicas.",
+        "Programas de compressão lossless semelhantes ao FLAC."
+      ],
+      "correctIndex": 1,
+      "explanation": "Samplers baseiam-se na síntese PCM: armazenam gravações digitais em memórias de amostras, bancos de sons e fontes de som (como arquivos SoundFont) que podem ser disparadas por eventos musicais.",
+      "referenceTab": "sintese-midi-voz"
+    },
+    {
+      "id": "q21",
+      "category": "Processamento, Síntese, MIDI & Voz",
+      "difficulty": "intermediario",
+      "question": "Em uma rede local MIDI composta por múltiplos instrumentos ligados em série, qual é a função da porta THRU e quantos canais simultâneos cada rede MIDI suporta?",
+      "options": [
+        "A porta THRU converte áudio analógico em MP3; cada rede suporta 8 canais.",
+        "A porta THRU replica para o próximo dispositivo as mensagens recebidas na porta IN (encadeamento em série); cada rede suporta 16 canais (timbres diferentes simultâneos).",
+        "A porta THRU envia apenas o sinal de relógio do microfone; cada rede suporta 64 canais.",
+        "A porta THRU substitui o alto-falante; cada rede suporta apenas 1 canal mono."
+      ],
+      "correctIndex": 1,
+      "explanation": "Cada porto MIDI sustenta uma rede com até 16 canais independentes. A porta THRU retransmite fielmente o que chega à porta IN para encadear vários módulos sintetizadores e processadores em série.",
+      "referenceTab": "sintese-midi-voz"
+    },
+    {
+      "id": "q22",
+      "category": "Processamento, Síntese, MIDI & Voz",
+      "difficulty": "basico",
+      "question": "Por que arquivos MIDI (.mid) ocupam muito menos espaço em disco do que arquivos WAV e qual é uma de suas principais limitações?",
+      "options": [
+        "Porque usam compressão psicoacústica extrema; sua limitação é não suportar 44,1 kHz.",
+        "Porque armazenam apenas eventos musicais (notas, tempo, velocidade, canal) e não amostras da forma de onda; sua limitação é serem inadequados para voz/efeitos e dependerem da qualidade do sintetizador.",
+        "Porque gravam apenas o canal esquerdo em 4 bits; sua limitação é não permitir alterar timbres.",
+        "Porque exigem conexão de internet constante; sua limitação é alto consumo computacional."
+      ],
+      "correctIndex": 1,
+      "explanation": "Arquivos .mid guardam instruções de eventos musicais (tamanho reduzido e baixo custo computacional, permitindo trocar timbres), mas não armazenam áudio gravado — logo não servem para voz falada e o resultado sonoro depende do sintetizador usado.",
+      "referenceTab": "sintese-midi-voz"
+    },
+    {
+      "id": "q23",
+      "category": "Processamento, Síntese, MIDI & Voz",
+      "difficulty": "intermediario",
+      "question": "Quais são as quatro vistas típicas oferecidas por sequenciadores (editores MIDI) para criar e inspecionar arquivos .mid?",
+      "options": [
+        "Forma de onda, espectrograma, histograma e canal alfa.",
+        "Trilhas (tracks), rolos de pianola (piano roll), lista de eventos (event list) e pautas musicais (partitura).",
+        "Amostrador, quantizador, codificador e filtro passa-baixas.",
+        "WAV, AIFF, FLAC e MP3."
+      ],
+      "correctIndex": 1,
+      "explanation": "Editores/sequenciadores MIDI apresentam os dados musicais em quatro visões complementares: trilhas, rolo de pianola (piano roll), lista de eventos (Trk, Tick, Chn, Nota, Velocity) e pauta/partitura.",
+      "referenceTab": "sintese-midi-voz"
+    },
+    {
+      "id": "q24",
+      "category": "Processamento, Síntese, MIDI & Voz",
+      "difficulty": "avancado",
+      "question": "Ao comparar os espectros de frequência das vogais 'a' (registro grave), 'a' (registro agudo) e 'u' (registro grave), que característica distingue claramente o espectro da vogal 'u'?",
+      "options": [
+        "A vogal 'u' concentra sua energia principalmente nas baixas frequências (pico proeminente próximo a 172 Hz e forte atenuação acima de 1 kHz), enquanto 'a' apresenta harmônicos intensos estendendo-se por frequências mais altas.",
+        "A vogal 'u' possui energia uniforme e plana de 100 Hz até 16 kHz, igual ao ruído branco.",
+        "A vogal 'a' em registro agudo possui frequência fundamental mais baixa do que em registro grave.",
+        "A vogal 'u' não possui componentes harmônicos, apenas um único impulso no domínio do tempo."
+      ],
+      "correctIndex": 0,
+      "explanation": "Nos espectros de voz analisados por FFT, a vogal 'u' (registro grave) concentra energia nas frequências baixas (pico ~172 Hz / F3, caindo drasticamente após ~800–1.000 Hz), enquanto 'a' mantém harmônicos ricos em faixas médias e altas (com maior espaçamento entre harmônicos em registros agudos devido à fundamental mais alta).",
+      "referenceTab": "sintese-midi-voz"
+    },
+    {
+      "id": "q25",
+      "category": "Processamento, Síntese, MIDI & Voz",
+      "difficulty": "intermediario",
+      "question": "No processamento de voz, qual fluxo descreve corretamente o reconhecimento de voz e qual é um dos principais problemas da síntese de voz?",
+      "options": [
+        "Reconhecimento: texto → fonemas → áudio. Problema da síntese: cabos MIDI curtos.",
+        "Reconhecimento: áudio → fonemas → palavras → comandos. Problema da síntese: coarticulação (influência mútua entre fonemas) e modelos fonéticos dependentes de idioma.",
+        "Reconhecimento: DAC → ADC → PCM. Problema da síntese: excesso de bits no formato WAV.",
+        "Reconhecimento: pauta → piano roll → sintetizador FM. Problema da síntese: taxa de amostragem de 44,1 kHz."
+      ],
+      "correctIndex": 1,
+      "explanation": "A síntese de voz converte texto → fonemas → áudio (enfrentando dependência de idioma, coarticulação entre fonemas e inflexões/vibrato), enquanto o reconhecimento percorre o caminho inverso: áudio → fonemas → palavras → comandos.",
+      "referenceTab": "sintese-midi-voz"
+    }
+  ]
+}

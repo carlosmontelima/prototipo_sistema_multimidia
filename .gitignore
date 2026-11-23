@@ -1,0 +1,11 @@
+# Arquivos de sistema e editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Evitar envio acidental de documentos academicos com dados pessoais
+*.pdf
+*.docx
+*.pptx
