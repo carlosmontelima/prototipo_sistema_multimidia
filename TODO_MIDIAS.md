@@ -30,13 +30,13 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 ### A. Amostras Vocais para o Equalizador de 5 Bandas & Analisador FFT
 - **Onde aparece no sistema:** Aba **Síntese, MIDI & Voz** → módulo `#eqFftModule` (`<audio id="eqAudioSource">`, botões `#presetVowelALow`, `#presetVowelAHigh` e `#presetVowelULow`).
 
-- [ ] **`assets/audio/vogal_a_registro_grave.wav`**
+- [x] **`assets/audio/vogal_a_registro_grave.wav`**
   - **O que gravar:** Emissão sustentada (~3 a 5 segundos) da vogal `"a"` em **registro vocal grave** (fundamental baixa, harmônicos próximos).
   - **Formato recomendado:** WAV PCM, 44.1 kHz, 16-bit.
 - [ ] **`assets/audio/vogal_a_registro_agudo.wav`**
   - **O que gravar:** Emissão sustentada (~3 a 5 segundos) da vogal `"a"` em **registro vocal agudo** (fundamental alta, maior espaçamento entre harmônicos no espectro FFT).
   - **Formato recomendado:** WAV PCM, 44.1 kHz, 16-bit.
-- [ ] **`assets/audio/vogal_u_registro_grave.wav`**
+- [x] **`assets/audio/vogal_u_registro_grave.wav`**
   - **O que gravar:** Emissão sustentada (~3 a 5 segundos) da vogal `"u"` em **registro vocal grave** (energia concentrada abaixo de 800 Hz com forte queda nas frequências altas).
   - **Formato recomendado:** WAV PCM, 44.1 kHz, 16-bit.
 
@@ -70,7 +70,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - [ ] **`assets/imagens/midi_sequenciador_daw.png`**
   - **Onde aparece:** Aba **Síntese, MIDI & Voz** → Inspetor lateral (`Sequenciador MIDI na Prática`).
   - **Conteúdo:** Captura de tela do sequenciador MIDI (LMMS/MuseScore/Reaper) exibindo o piano roll/trilhas da composição autoral ou foto de teclado/controlador MIDI.
-- [ ] **`assets/imagens/estudio_bancada.png`**
+- [x] **`assets/imagens/estudio_bancada.png`**
   - **Onde aparece:** Aba **Estúdio Autoral** → Inspetor lateral (`#mediaStudioPhoto` — `Bancada de Produção`).
   - **Conteúdo:** Fotografia do ambiente/setup de gravação e edição utilizado pela equipe na produção do protótipo.
 - [ ] **`assets/imagens/poster_video.png`**
