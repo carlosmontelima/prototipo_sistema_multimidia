@@ -1562,90 +1562,6 @@ input[type="range"].studio-fader-vertical {
   object-fit: contain;
 }
 
-/* Pixel Art CSS Animation Showcase (Obsidian + #FF5500 + #38BDF8) */
-.pixel-showcase-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  gap: 14px;
-  padding: 14px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-recessed);
-  border: 1px solid var(--border-subtle);
-}
-
-.pixel-eq-widget {
-  display: flex;
-  align-items: flex-end;
-  gap: 5px;
-  height: 68px;
-  padding: 8px 10px;
-  background: #09090B;
-  border: 1px solid var(--border-subtle);
-  image-rendering: pixelated;
-}
-
-.pixel-eq-col {
-  width: 9px;
-  height: 100%;
-  display: flex;
-  flex-direction: column-reverse;
-}
-
-.pixel-eq-bar {
-  width: 9px;
-  height: 18px;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      var(--accent) 0px,
-      var(--accent) 5px,
-      #09090B 5px,
-      #09090B 8px
-    );
-  animation: pixelEqBounce 1.1s steps(6, end) infinite;
-}
-
-.pixel-eq-col:nth-child(2) .pixel-eq-bar { animation-duration: 0.85s; animation-delay: -0.2s; }
-.pixel-eq-col:nth-child(3) .pixel-eq-bar {
-  animation-duration: 1.25s;
-  animation-delay: -0.45s;
-  background: repeating-linear-gradient(0deg, var(--compare-blue) 0px, var(--compare-blue) 5px, #09090B 5px, #09090B 8px);
-}
-.pixel-eq-col:nth-child(4) .pixel-eq-bar { animation-duration: 0.95s; animation-delay: -0.35s; }
-.pixel-eq-col:nth-child(5) .pixel-eq-bar { animation-duration: 1.05s; animation-delay: -0.7s; }
-.pixel-eq-col:nth-child(6) .pixel-eq-bar {
-  animation-duration: 0.78s;
-  animation-delay: -0.15s;
-  background: repeating-linear-gradient(0deg, var(--compare-blue) 0px, var(--compare-blue) 5px, #09090B 5px, #09090B 8px);
-}
-
-@keyframes pixelEqBounce {
-  0%   { height: 14px; }
-  25%  { height: 42px; }
-  50%  { height: 28px; }
-  75%  { height: 48px; }
-  100% { height: 14px; }
-}
-
-.pixel-tape-svg {
-  width: 92px;
-  height: 60px;
-  shape-rendering: crispEdges;
-  image-rendering: pixelated;
-}
-
-.pixel-reel-spin {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: pixelReelRotate 2.4s steps(8, end) infinite;
-}
-
-@keyframes pixelReelRotate {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
 /* ==========================================================================
    QUIZ INTERATIVO
    ========================================================================== */
@@ -1955,5 +1871,167 @@ input[type="range"].studio-fader-vertical {
   }
   .eq-bank {
     overflow-x: auto;
+  }
+}
+
+/* ==========================================================================
+   ANIMAÇÕES CSS E MICROINTERAÇÕES DE HARDWARE (LINEAR / STUDIO MOTION)
+   ========================================================================== */
+@keyframes panelReveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes optionSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes feedbackReveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wrongShake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  50%      { transform: translateX(4px); }
+  75%      { transform: translateX(-2px); }
+}
+
+@keyframes correctPop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.012); }
+  100% { transform: scale(1); }
+}
+
+@keyframes scoreRingIn {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pixelEmblemStep {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(0.55); }
+}
+
+@keyframes activePlayGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 85, 0, 0.28); }
+  50%      { box-shadow: 0 0 0 4px rgba(255, 85, 0, 0); }
+}
+
+/* Transição suave ao trocar de aba ou de tela do Quiz */
+.env-panel.is-active,
+.quiz-screen.is-visible {
+  animation: panelReveal 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Entrada de modais e balões sobrepostos */
+.studio-modal-backdrop.is-open .studio-modal,
+.format-detail-backdrop.is-open .format-detail-box {
+  animation: modalPopIn 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Opções e feedback do Quiz */
+.quiz-option-enter {
+  animation: optionSlideIn 210ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.quiz-option-btn.is-correct {
+  animation: correctPop 240ms ease-out;
+}
+
+.quiz-option-btn.is-wrong {
+  animation: wrongShake 280ms ease-in-out;
+}
+
+.quiz-feedback-box.is-reveal {
+  animation: feedbackReveal 190ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.quiz-screen.is-visible .quiz-score-ring {
+  animation: scoreRingIn 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.quiz-review-item {
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.quiz-review-item:hover {
+  transform: translateX(2px);
+}
+
+/* Microinterações táteis em botões, células MIDI e emblema pixel */
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn--primary.is-playing {
+  animation: activePlayGlow 1.8s ease-in-out infinite;
+}
+
+.pr-cell.is-active {
+  animation: correctPop 150ms ease-out;
+}
+
+.format-balloon-btn {
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.format-balloon-btn:hover {
+  transform: translateY(-1px);
+}
+
+.header-brand:hover .pixel-emblem rect {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: pixelEmblemStep 0.6s steps(3, end) infinite;
+}
+
+.header-brand:hover .pixel-emblem rect:nth-child(2) { animation-delay: -0.15s; }
+.header-brand:hover .pixel-emblem rect:nth-child(3) { animation-delay: -0.3s; }
+.header-brand:hover .pixel-emblem rect:nth-child(4) { animation-delay: -0.45s; }
+
+/* Respeito à preferência de movimento reduzido do sistema operacional */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

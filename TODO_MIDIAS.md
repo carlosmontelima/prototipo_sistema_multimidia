@@ -13,6 +13,8 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - [x] `js/navigation.js` — Navegação não-linear, overlay de formatos, modais, seletor de amostras do equalizador e carregamento automático das mídias externas.
 - [x] `js/audio-engine.js` — Motor Web Audio API nativo (Fourier, Bitcrusher/Downsampler PCM, EQ 5 bandas `BiquadFilterNode`, `AnalyserNode` FFT e síntese MIDI FM/PCM).
 - [x] `js/simulators.js` — Simuladores interativos em Canvas 60fps, animação do transdutor SVG, bancada PCM com hover, calculadora de bitrate, EQ/FFT e Piano Roll MIDI.
+- [x] `js/studio-media.js` — Comparador A/B sincronizado em tempo real e player nativo `.mid` offline.
+- [x] `js/quiz-engine.js` — Motor do Quiz Interativo com embaralhamento Fisher-Yates (5 sorteadas de 25), feedback imediato e análise percentual.
 - [x] `data/quiz-questions.json` — Banco com 25 questões prontas (SM_05, SM_06 e FLAC).
 - [x] `assets/vetores/transdutor_alto_falante.svg` — Vetorial com camadas `<g>` (usado em **Física & Fourier** e **Estúdio Autoral**).
 - [x] `assets/vetores/cadeia_digitalizacao_pcm.svg` — Vetorial com camadas `<g>` (usado em **Digitalização & PCM** e **Estúdio Autoral**).
@@ -56,7 +58,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - **Pasta no projeto:** `prototipo-audio-digital/assets/imagens/`
 - **Nota:** Todas as figuras abaixo têm detecção automática no `navigation.js` e ampliação ao clicar.
 
-- [ ] **`assets/imagens/fisica_transdutores.png`**
+- [x] **`assets/imagens/fisica_transdutores.png`**
   - **Onde aparece:** Aba **Física & Fourier** → Inspetor lateral (`Registro Fotográfico — Transdutores`).
   - **Conteúdo:** Foto original produzida pela equipe mostrando microfone (captação acústico-elétrica) e caixa de som/monitor ou fone de referência (reprodução elétrico-acústica).
 - [ ] **`assets/imagens/pcm_amostragem_daw.png`**

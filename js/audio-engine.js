@@ -696,11 +696,13 @@
       return buf;
     }
 
-    playMidiNote(noteName, engineMode = 'fm', velocity = 100, startTime = null, durationSec = 0.28) {
+    playMidiNote(noteOrFreq, engineMode = 'fm', velocity = 100, startTime = null, durationSec = 0.28) {
       const ctx = this.ensureContext();
       if (!ctx) return;
 
-      const freq = NOTE_FREQUENCIES[noteName] || 261.6256;
+      const freq = typeof noteOrFreq === 'number'
+        ? noteOrFreq
+        : (NOTE_FREQUENCIES[noteOrFreq] || 261.6256);
       const t0 = startTime !== null ? Math.max(ctx.currentTime, startTime) : ctx.currentTime;
       const velNorm = Math.max(0.15, Math.min(1, velocity / 127));
 

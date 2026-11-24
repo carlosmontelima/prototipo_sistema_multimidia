@@ -1356,7 +1356,7 @@
         <div class="panel-header">
           <div>
             <h1 class="panel-title" id="title-estudio-autoral">Estúdio Autoral</h1>
-            <p class="panel-lead">Produção original de áudio digitalizado (bruto vs. tratado), vídeo demonstrativo, composição MIDI e animações da equipe.</p>
+            <p class="panel-lead">Produção original de áudio digitalizado (bruto vs. tratado), vídeo demonstrativo e composição MIDI da equipe.</p>
           </div>
           <div class="panel-crosslinks">
             <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="sintese-midi-voz">Equalizador &amp; MIDI</button>
@@ -1428,8 +1428,8 @@
             </section>
           </div>
 
-          <!-- COLUNA DIREITA: MIDI + FOTO PRODUÇÃO + VETORIAIS + ANIMAÇÃO -->
-          <aside class="workbench-inspector" aria-label="Produção MIDI, registros fotográficos, vetores e animação">
+          <!-- COLUNA DIREITA: MIDI + FOTO PRODUÇÃO + VETORIAIS -->
+          <aside class="workbench-inspector" aria-label="Produção MIDI, registros fotográficos e vetores">
             <!-- Música MIDI (.mid) -->
             <section class="inspector-section" id="mediaMidiPlayer">
               <div class="row-between" style="margin-bottom: 10px;">
@@ -1511,53 +1511,6 @@
                   </div>
                   <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="midi">Abrir</button>
                 </div>
-              </div>
-            </section>
-
-            <!-- Animação (Pixel Art CSS + Canvas Procedural) -->
-            <section class="inspector-section" id="mediaAnimationShowcase">
-              <div class="row-between" style="margin-bottom: 10px;">
-                <h2 class="inspector-heading mb-0">Animação (Canvas &amp; Pixel Art)</h2>
-                <div class="row-wrap">
-                  <select id="animModeSelect" class="btn btn--xs" aria-label="Modo de animação procedural">
-                    <option value="lissajous">Lissajous</option>
-                    <option value="standing-wave">Onda Estacionária</option>
-                    <option value="spectrum-bars">Espectro</option>
-                  </select>
-                  <button type="button" class="btn btn--primary btn--xs" id="animToggleBtn" data-state="standby">Ativar</button>
-                </div>
-              </div>
-
-              <div class="pixel-showcase-box">
-                <div class="pixel-eq-widget" aria-label="Equalizador animado em Pixel Art CSS">
-                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
-                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
-                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
-                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
-                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
-                  <div class="pixel-eq-col"><div class="pixel-eq-bar"></div></div>
-                </div>
-
-                <svg class="pixel-tape-svg" viewBox="0 0 28 18" xmlns="http://www.w3.org/2000/svg" aria-label="Fita cassete em Pixel Art">
-                  <rect x="1" y="1" width="26" height="16" fill="#18181B" stroke="#323238" stroke-width="1"/>
-                  <rect x="3" y="3" width="22" height="9" fill="#09090B"/>
-                  <g class="pixel-reel-spin">
-                    <rect x="6" y="5" width="5" height="5" fill="#FF5500"/>
-                    <rect x="8" y="6" width="1" height="3" fill="#09090B"/>
-                    <rect x="7" y="7" width="3" height="1" fill="#09090B"/>
-                  </g>
-                  <g class="pixel-reel-spin">
-                    <rect x="17" y="5" width="5" height="5" fill="#38BDF8"/>
-                    <rect x="19" y="6" width="1" height="3" fill="#09090B"/>
-                    <rect x="18" y="7" width="3" height="1" fill="#09090B"/>
-                  </g>
-                  <rect x="11" y="7" width="6" height="1" fill="#52525B"/>
-                  <rect x="7" y="13" width="14" height="3" fill="#27272A"/>
-                </svg>
-              </div>
-
-              <div class="scope-frame mt-sm">
-                <canvas id="studioAnimCanvas" class="scope-canvas scope-canvas--compact" width="420" height="112" aria-label="Animação procedural de áudio em Canvas"></canvas>
               </div>
             </section>
           </aside>
@@ -1816,5 +1769,7 @@
   <script src="js/navigation.js" defer></script>
   <script src="js/audio-engine.js" defer></script>
   <script src="js/simulators.js" defer></script>
+  <script src="js/studio-media.js" defer></script>
+  <script src="js/quiz-engine.js" defer></script>
 </body>
 </html>

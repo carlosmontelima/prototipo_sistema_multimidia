@@ -561,7 +561,6 @@
     }
     if (!studioLoaded) {
       drawScopeGrid(document.getElementById('abWaveformCanvas'), { preview: 'sine', color: '#38BDF8', rows: 4 });
-      drawScopeGrid(document.getElementById('studioAnimCanvas'), { preview: 'lissajous', rows: 4 });
     }
   }
 
