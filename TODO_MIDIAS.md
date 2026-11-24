@@ -67,7 +67,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - [ ] **`assets/imagens/compressao_espectrograma.png`**
   - **Onde aparece:** Aba **Compressão & Formatos** → Inspetor lateral (`Espectrograma: PCM/FLAC vs. Lossy`).
   - **Conteúdo:** Captura de espectrograma mostrando preservação do espectro completo em WAV/FLAC comparada ao corte de altas frequências em formato lossy (ex.: MP3 96/128 kbps).
-- [ ] **`assets/imagens/midi_sequenciador_daw.png`**
+- [x] **`assets/imagens/midi_sequenciador_daw.png`**
   - **Onde aparece:** Aba **Síntese, MIDI & Voz** → Inspetor lateral (`Sequenciador MIDI na Prática`).
   - **Conteúdo:** Captura de tela do sequenciador MIDI (LMMS/MuseScore/Reaper) exibindo o piano roll/trilhas da composição autoral ou foto de teclado/controlador MIDI.
 - [x] **`assets/imagens/estudio_bancada.png`**
@@ -85,7 +85,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - **Pasta no projeto:** `prototipo-audio-digital/assets/midi/`
 - **Onde aparece no sistema:** Aba **Estúdio Autoral** → módulo `#mediaMidiPlayer` (`#studioMidiHost` / `#studioMidiFilePath`).
 
-- [ ] **`assets/midi/composicao_autoral.mid`**
+- [x] **`assets/midi/composicao_autoral.mid`**
   - **O que produzir:** Composição musical original criada pela equipe em formato Standard MIDI File (`.mid`), de preferência com mais de uma trilha/canal (ex.: melodia + acompanhamento).
 - [ ] Guardar também o projeto fonte (`.mscz` ou `.mmpz`) na pasta de entrega do Drive para abrir durante a apresentação.
 
