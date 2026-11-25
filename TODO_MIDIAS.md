@@ -43,9 +43,9 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 ### B. Faixas do Comparador A/B (Tratamento de Áudio: Bruto vs. Tratado)
 - **Onde aparece no sistema:** Aba **Estúdio de Tratamento** → módulo `#mediaAudioAB` (`<audio id="audioRawSource">` e `<audio id="audioTreatedSource">`).
 
-- [ ] **`assets/audio/voz_bruta_original.wav`**
+- [x] **`assets/audio/voz_bruta_original.wav`**
   - **O que gravar:** Narração/locução original da equipe **sem nenhum tratamento** (áudio bruto direto do microfone, com ruído ambiente natural).
-- [ ] **`assets/audio/voz_tratada_master.wav`**
+- [x] **`assets/audio/voz_tratada_master.wav`**
   - **O que produzir:** Mesma gravação de voz após o fluxo de tratamento na DAW (redução de ruído, filtro passa-altas ~80 Hz, equalização, compressão dinâmica e normalização a `-1 dB`), mantendo **exatamente a mesma duração** para sincronismo na alternância A/B.
 - [ ] *(Opcional para demonstração comparativa)* **`assets/audio/voz_tratada_master.flac`**
   - **O que produzir:** Exportação da faixa tratada em `.flac` para demonstrar ao vivo a compressão sem perdas em relação ao `.wav`.
@@ -97,7 +97,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - **Pasta no projeto:** `prototipo-audio-digital/assets/video/`
 - **Onde aparece no sistema:** Aba **Estúdio de Tratamento** → módulo `#mediaVideoPlayer` (`<video id="studioDemoVideo">`).
 
-- [ ] **`assets/video/demonstracao_tratamento.mp4`**
+- [x] **`assets/video/demonstracao_tratamento.mp4`**
   - **O que produzir:** Vídeo demonstrativo (sugestão: 30 s a 90 s) apresentando a captura e edição das mídias do projeto (ex.: tratamento de áudio na DAW / composição MIDI).
   - **Especificação recomendada:** Contêiner `.mp4`, vídeo `H.264`, áudio `AAC 44.1/48 kHz`, `1280x720` (720p).
 - [ ] Guardar o trecho bruto (não editado) do vídeo para entrega no Drive conforme instruções do professor.

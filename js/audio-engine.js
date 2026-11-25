@@ -582,7 +582,7 @@
           this.eq.active = false;
           return {
             ok: false,
-            reason: 'Gravação não encontrada. Adicione o arquivo .wav em assets/audio/ (ver TODO_MIDIAS.md).'
+            reason: 'Arquivo de áudio indisponível em assets/audio/.'
           };
         }
       }

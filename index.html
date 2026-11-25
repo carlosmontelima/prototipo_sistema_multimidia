@@ -383,9 +383,9 @@
 
             <div class="inspector-section">
               <h2 class="inspector-heading">Registro Fotográfico — Transdutores</h2>
-              <figure class="studio-figure" data-raster-figure data-figure-title="Transdutores de Estúdio (Microfone e Monitor)">
+              <figure class="studio-figure has-image" data-raster-figure data-figure-title="Transdutores de Estúdio (Microfone e Monitor)">
                 <div class="studio-figure-frame">
-                  <div class="studio-figure-placeholder">
+                  <div class="studio-figure-placeholder" hidden>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
                       <rect x="3" y="3" width="18" height="18" rx="2"/>
                       <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -393,7 +393,7 @@
                     </svg>
                     <span class="mono text-xs text-muted">assets/imagens/fisica_transdutores.png</span>
                   </div>
-                  <img class="studio-figure-img" src="assets/imagens/fisica_transdutores.png" alt="Fotografia de microfone e monitor de referência utilizados na captação e reprodução sonora" hidden>
+                  <img class="studio-figure-img" src="assets/imagens/fisica_transdutores.png" alt="Fotografia de microfone e monitor de referência utilizados na captação e reprodução sonora">
                 </div>
                 <figcaption class="studio-figure-caption">
                   <span>Microfone (captação) e monitor/fone (reprodução)</span>
@@ -689,9 +689,9 @@
 
             <div class="inspector-section">
               <h2 class="inspector-heading">Amostras Discretas na DAW</h2>
-              <figure class="studio-figure" data-raster-figure data-figure-title="Zoom de Amostras Discretas em DAW">
+              <figure class="studio-figure has-image" data-raster-figure data-figure-title="Zoom de Amostras Discretas em DAW">
                 <div class="studio-figure-frame">
-                  <div class="studio-figure-placeholder">
+                  <div class="studio-figure-placeholder" hidden>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
                       <rect x="3" y="3" width="18" height="18" rx="2"/>
                       <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -699,7 +699,7 @@
                     </svg>
                     <span class="mono text-xs text-muted">assets/imagens/pcm_amostragem_daw.png</span>
                   </div>
-                  <img class="studio-figure-img" src="assets/imagens/pcm_amostragem_daw.png" alt="Captura de tela em zoom mostrando pontos individuais de amostra PCM em editor de áudio" hidden>
+                  <img class="studio-figure-img" src="assets/imagens/pcm_amostragem_daw.png" alt="Captura de tela em zoom mostrando pontos individuais de amostra PCM em editor de áudio">
                 </div>
                 <figcaption class="studio-figure-caption">
                   <span>Visualização de amostras discretas no editor</span>
@@ -993,9 +993,9 @@
 
             <div class="inspector-section">
               <h2 class="inspector-heading">Espectrograma: PCM/FLAC vs. Lossy</h2>
-              <figure class="studio-figure" data-raster-figure data-figure-title="Espectrograma Comparativo de Formatos">
+              <figure class="studio-figure has-image" data-raster-figure data-figure-title="Espectrograma Comparativo de Formatos">
                 <div class="studio-figure-frame">
-                  <div class="studio-figure-placeholder">
+                  <div class="studio-figure-placeholder" hidden>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
                       <rect x="3" y="3" width="18" height="18" rx="2"/>
                       <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -1003,7 +1003,7 @@
                     </svg>
                     <span class="mono text-xs text-muted">assets/imagens/compressao_espectrograma.png</span>
                   </div>
-                  <img class="studio-figure-img" src="assets/imagens/compressao_espectrograma.png" alt="Espectrograma ilustrando preservação de altas frequências em WAV/FLAC comparado ao corte espectral em MP3" hidden>
+                  <img class="studio-figure-img" src="assets/imagens/compressao_espectrograma.png" alt="Espectrograma ilustrando preservação de altas frequências em WAV/FLAC comparado ao corte espectral em MP3">
                 </div>
                 <figcaption class="studio-figure-caption">
                   <span>Comparação espectral de corte em altas frequências</span>
@@ -1052,14 +1052,14 @@
                 </div>
               </div>
 
-              <!-- Fonte de áudio gravada pela equipe (TODO_MIDIAS.md) -->
+              <!-- Fonte de áudio gravada pela equipe -->
               <div class="eq-audio-bar">
                 <span class="row-wrap" style="gap: 6px;">
-                  <span class="led led--sm led--idle" id="eqAudioFileLed"></span>
+                  <span class="led led--sm led--accent" id="eqAudioFileLed"></span>
                   <span>Gravação selecionada:</span>
                   <span class="mono text-xs text-primary" id="eqAudioFilePath">assets/audio/vogal_a_registro_grave.wav</span>
                 </span>
-                <span class="mono text-xs text-muted" id="eqAudioStatus">Aguardando gravação (ver TODO_MIDIAS.md)</span>
+                <span class="mono text-xs text-muted" id="eqAudioStatus">Áudio pronto</span>
               </div>
               <audio id="eqAudioSource" preload="metadata" loop src="assets/audio/vogal_a_registro_grave.wav"></audio>
 
@@ -1106,8 +1106,8 @@
                   <div class="scope-meta">
                     <span>Espectro FFT (2048 pts)</span>
                     <div class="row-wrap">
-                      <span class="readout-chip">Pico <strong id="fftProminentFreq">593 Hz (D5)</strong></span>
-                      <span class="readout-chip">Nível <strong id="fftProminentDb">-16.0 dB</strong></span>
+                      <span class="readout-chip">Pico <strong id="fftProminentFreq">-- Hz</strong></span>
+                      <span class="readout-chip">Nível <strong id="fftProminentDb">-- dB</strong></span>
                     </div>
                   </div>
                   <canvas id="fftCanvas" class="scope-canvas" width="680" height="210" aria-label="Analisador espectral FFT em tempo real"></canvas>
@@ -1331,9 +1331,9 @@
 
             <div class="inspector-section">
               <h2 class="inspector-heading">Sequenciador MIDI na Prática</h2>
-              <figure class="studio-figure" data-raster-figure data-figure-title="Sequenciador MIDI / Controlador">
+              <figure class="studio-figure has-image" data-raster-figure data-figure-title="Sequenciador MIDI / Controlador">
                 <div class="studio-figure-frame">
-                  <div class="studio-figure-placeholder">
+                  <div class="studio-figure-placeholder" hidden>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
                       <rect x="3" y="3" width="18" height="18" rx="2"/>
                       <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -1341,7 +1341,7 @@
                     </svg>
                     <span class="mono text-xs text-muted">assets/imagens/midi_sequenciador_daw.png</span>
                   </div>
-                  <img class="studio-figure-img" src="assets/imagens/midi_sequenciador_daw.png" alt="Captura de tela do sequenciador MIDI e piano roll da composição autoral" hidden>
+                  <img class="studio-figure-img" src="assets/imagens/midi_sequenciador_daw.png" alt="Captura de tela do sequenciador MIDI e piano roll da composição autoral">
                 </div>
                 <figcaption class="studio-figure-caption">
                   <span>Piano roll / trilhas MIDI no editor (LMMS / MuseScore)</span>
@@ -1354,10 +1354,10 @@
             <section class="inspector-section" id="mediaMidiPlayer">
               <div class="row-between" style="margin-bottom: 10px;">
                 <h2 class="inspector-heading mb-0" style="display: flex; align-items: center; gap: 7px;">
-                  <span class="led led--sm led--idle" id="studioMidiLed"></span>
+                  <span class="led led--sm led--accent" id="studioMidiLed"></span>
                   <span>Música MIDI (.mid)</span>
                 </h2>
-                <span class="mono text-xs text-muted" id="studioMidiStatus">Aguardando .mid</span>
+                <span class="mono text-xs text-muted" id="studioMidiStatus">MIDI pronto</span>
               </div>
               <p class="mono text-xs text-secondary" id="studioMidiFilePath" style="margin-bottom: 6px;">assets/midi/composicao_autoral.mid</p>
               <p class="text-xs text-muted" id="studioMidiMeta" style="margin-bottom: 10px;">Composição original da equipe (LMMS / MuseScore).</p>
@@ -1416,13 +1416,13 @@
                   <button type="button" class="segmented-btn is-selected" id="abSelectRaw" data-ab-mode="raw" role="radio" aria-checked="true">A: Áudio Bruto (Sem Tratamento)</button>
                   <button type="button" class="segmented-btn" id="abSelectTreated" data-ab-mode="treated" role="radio" aria-checked="false">B: Áudio Tratado (Limpeza + EQ + Norm.)</button>
                 </div>
-                <span class="mono text-xs text-muted" id="abFileStatus">Ver TODO_MIDIAS.md</span>
+                <span class="mono text-xs text-muted" id="abFileStatus">Faixas A/B prontas</span>
               </div>
 
               <div class="scope-frame mt-sm">
                 <div class="scope-meta">
                   <span class="row-wrap" style="gap: 6px;">
-                    <span class="led led--sm led--accent" id="abModeLed"></span>
+                    <span class="led led--sm led--cyan" id="abModeLed"></span>
                     <span id="abActiveTrackLabel">Monitorando: A — Áudio Bruto</span>
                   </span>
                 </div>
@@ -1441,14 +1441,14 @@
               </div>
 
               <div class="video-chassis">
-                <video id="studioDemoVideo" class="studio-video" controls preload="metadata" poster="assets/imagens/poster_video.png">
-                  <source src="assets/video/demonstracao_tratamento.mp4" type="video/mp4">
+                <video id="studioDemoVideo" class="studio-video" controls preload="metadata">
+                  <source src="assets/video/demonstracao_tratamento.mp4#t=0.1" type="video/mp4">
                   Seu navegador não suporta reprodução de vídeo HTML5.
                 </video>
                 <div class="media-status-bar">
                   <span class="row-wrap" style="gap: 6px;">
-                    <span class="led led--sm led--idle" id="videoStatusLed"></span>
-                    <span id="videoStatusBadge">Aguardando assets/video/demonstracao_tratamento.mp4</span>
+                    <span class="led led--sm led--accent" id="videoStatusLed"></span>
+                    <span id="videoStatusBadge">Vídeo pronto — demonstracao_tratamento.mp4</span>
                   </span>
                 </div>
               </div>
@@ -1460,9 +1460,9 @@
             <!-- Registro Fotográfico da Bancada (Imagem Matricial) -->
             <section class="inspector-section" id="mediaStudioPhoto">
               <h2 class="inspector-heading">Bancada de Produção</h2>
-              <figure class="studio-figure" data-raster-figure data-figure-title="Ambiente de Gravação e Edição da Equipe">
+              <figure class="studio-figure has-image" data-raster-figure data-figure-title="Ambiente de Gravação e Edição da Equipe">
                 <div class="studio-figure-frame studio-figure-frame--wide">
-                  <div class="studio-figure-placeholder">
+                  <div class="studio-figure-placeholder" hidden>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
                       <rect x="3" y="3" width="18" height="18" rx="2"/>
                       <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -1470,7 +1470,7 @@
                     </svg>
                     <span class="mono text-xs text-muted">assets/imagens/estudio_bancada.png</span>
                   </div>
-                  <img class="studio-figure-img" src="assets/imagens/estudio_bancada.png" alt="Foto do ambiente de gravação e edição utilizado pela equipe" hidden>
+                  <img class="studio-figure-img" src="assets/imagens/estudio_bancada.png" alt="Foto do ambiente de gravação e edição utilizado pela equipe">
                 </div>
                 <figcaption class="studio-figure-caption">
                   <span>Setup de gravação e edição da equipe</span>

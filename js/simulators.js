@@ -20,8 +20,9 @@
     if (!ctx) return null;
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    const w = rect.width > 0 ? rect.width : canvas.width;
-    const h = rect.height > 0 ? rect.height : canvas.height;
+    if (rect.width <= 0 || rect.height <= 0) return null;
+    const w = rect.width;
+    const h = rect.height;
     const targetW = Math.round(w * dpr);
     const targetH = Math.round(h * dpr);
     if (canvas.width !== targetW || canvas.height !== targetH) {

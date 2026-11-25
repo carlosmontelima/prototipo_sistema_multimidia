@@ -3,11 +3,53 @@
  *
  * Recursos:
  * - Comparador A/B sincronizado em tempo real (Áudio Bruto vs. Áudio Tratado) no Estúdio de Tratamento
+ *   com forma de onda estática/fixa da faixa completa e cursor de reprodução sincronizado.
  * - Leitor binário nativo de Standard MIDI File (.mid) reproduzido via StudioAudioEngine na aba Síntese, MIDI & Voz
+ *   (compatível tanto com servidor HTTP quanto com execução direta via file://).
  */
 
 (function (global) {
   'use strict';
+
+  // Envelopes reais pré-extraídos de voz_bruta_original.wav e voz_tratada_master.wav (180 colunas)
+  // garantem desenho fixo e fiel desde o primeiro frame, inclusive sob protocolo file://.
+  const AB_STATIC_PEAKS = {
+    raw: [
+      0.026,0.045,0.076,0.101,0.079,0.08,0.084,0.091,0.099,0.088,0.106,0.073,0.069,0.068,0.078,0.11,0.095,0.098,0.105,0.11,
+      0.108,0.108,0.484,0.427,0.491,0.369,0.262,0.244,0.257,0.308,0.493,0.459,0.168,0.175,0.292,0.318,0.316,0.383,0.399,0.238,
+      0.301,0.6,0.517,0.56,0.607,0.596,0.608,0.563,0.441,0.377,0.217,0.355,0.269,0.149,0.152,0.305,0.242,0.121,0.204,0.164,
+      0.161,0.323,0.375,0.318,0.32,0.293,0.335,0.32,0.412,0.443,0.627,0.592,0.417,0.465,0.324,0.213,0.252,0.313,0.113,0.143,
+      0.327,0.411,0.256,0.406,0.81,0.777,0.514,0.214,0.154,0.435,0.408,0.319,0.409,0.395,0.317,0.199,0.217,0.202,0.204,0.208,
+      0.163,0.403,0.378,0.419,0.463,0.415,0.292,0.183,0.175,0.244,0.118,0.219,0.263,0.302,0.244,0.351,0.319,0.494,0.486,0.35,
+      0.319,0.344,0.283,0.249,0.325,0.655,0.637,0.722,0.643,0.664,0.169,0.135,0.445,0.567,0.592,0.415,0.355,0.31,0.377,0.108,
+      0.093,0.32,0.314,0.153,0.18,0.232,0.601,0.541,0.407,0.281,0.297,0.238,0.3,0.37,0.421,0.387,0.432,0.439,0.323,0.35,
+      0.377,0.342,0.262,0.164,0.129,0.197,0.198,0.382,0.288,0.268,0.29,0.186,0.296,0.215,0.249,0.243,0.172,0.117,0.135,0.098
+    ],
+    treated: [
+      0.006,0.011,0.015,0.022,0.02,0.018,0.02,0.016,0.02,0.016,0.016,0.016,0.017,0.014,0.016,0.023,0.021,0.018,0.022,0.025,
+      0.024,0.04,0.197,0.166,0.157,0.146,0.09,0.201,0.18,0.174,0.302,0.202,0.069,0.067,0.172,0.145,0.36,0.61,0.658,0.314,
+      0.138,0.341,0.327,0.304,0.287,0.256,0.25,0.199,0.141,0.098,0.139,0.379,0.335,0.099,0.042,0.114,0.116,0.054,0.235,0.109,
+      0.099,0.222,0.238,0.149,0.143,0.115,0.113,0.154,0.299,0.293,0.414,0.402,0.194,0.216,0.151,0.068,0.134,0.149,0.028,0.037,
+      0.155,0.178,0.097,0.126,0.375,0.396,0.287,0.145,0.097,0.156,0.147,0.083,0.173,0.164,0.12,0.233,0.187,0.163,0.206,0.193,
+      0.116,0.167,0.132,0.151,0.168,0.157,0.099,0.051,0.06,0.076,0.038,0.212,0.103,0.091,0.256,0.458,0.456,0.298,0.303,0.226,
+      0.182,0.164,0.206,0.131,0.191,0.356,0.548,0.529,0.512,0.489,0.086,0.068,0.175,0.32,0.288,0.194,0.14,0.095,0.138,0.034,
+      0.029,0.167,0.15,0.101,0.1,0.081,0.263,0.244,0.208,0.198,0.327,0.228,0.114,0.158,0.195,0.263,0.293,0.262,0.183,0.213,
+      0.197,0.181,0.121,0.05,0.117,0.21,0.068,0.54,0.313,0.285,0.309,0.227,0.164,0.152,0.131,0.09,0.062,0.036,0.025,0.029
+    ]
+  };
+
+  // Fallback binário integrado de assets/midi/composicao_autoral.mid para funcionamento 100% offline via file://
+  const EMBEDDED_MIDI_B64 =
+    'TVRoZAAAAAYAAQAEAeBNVHJrAAAAHQD/UQMIUq4A/1gEBAIYCAD/AwZNdXNpY2EA/y8ATVRyawAABJAAwFAAkEBggVyAQAAUkENggVyAQwAUkDxggVyAPAAUkENggVyAQwAUkEBggVyAQAAUkENggVyAQwAUkEBggVyAQAAUkD5ggVyAPgAUkD5ggVyAPgAUkENggVyAQwAUkEdggVyARwAUkENggVyAQwAUkD5ggVyAPgAUkENggVyAQwAUkEdggVyARwAUkEVggVyARQAUkDxggVyAPAAUkEBggVyAQAAUkEVggVyARQAUkEBggVyAQAAUkDxggVyAPAAUkEBggVyAQAAUkDxggVyAPAAUkEdggVyARwAUkDxggVyAPAAUkEFggVyAQQAUkEVggVyARQAUkEFggVyAQQAUkDxggVyAPAAUkEFggVyAQQAUkEVggVyARQAUkENggVyAQwAUkEBggVyAQAAUkENggVyAQwAUkDxggVyAPAAUkENggVyAQwAUkEBggVyAQAAUkENggVyAQwAUkEBggVyAQAAUkD5ggVyAPgAUkD5ggVyAPgAUkENggVyAQwAUkEdggVyARwAUkENggVyAQwAUkD5ggVyAPgAUkENggVyAQwAUkEdggVyARwAUkEVggVyARQAUkDxggVyAPAAUkEBggVyAQAAUkEVggVyARQAUkEBggVyAQAAUkDxggVyAPAAUkEBggVyAQAAUkDxggVyAPAAUkEdggVyARwAUkDxggVyAPAAUkEFggVyAQQAUkEVggVyARQAUkEFggVyAQQAUkDxggVyAPAAUkEFggVyAQQAUkEVggVyARQAUkENggVyAQwAUkExggVyATAAUkE9ggVyATwAUkEhggVyASAAUkE9ggVyATwAUkExggVyATAAUkE9ggVyATwAUkExggVyATAAUkEpggVyASgAUkEpggVyASgAUkE9ggVyATwAUkFNggVyAUwAUkE9ggVyATwAUkEpggVyASgAUkE9ggVyATwAUkFNggVyAUwAUkFFggVyAUQAUkEhggVyASAAUkExggVyATAAUkFFggVyAUQAUkExggVyATAAUkEhggVyASAAUkExggVyATAAUkEhggVyASAAUkFNggVyAUwAUkEhggVyASAAUkE1ggVyATQAUkFFggVyAUQAUkE1ggVyATQAUkEhggVyASAAUkE1ggVyATQAUkFFggVyAUQAUkE9ggVyATwAUkExggVyATAAUkE9ggVyATwAUkEhggVyASAAUkE9ggVyATwAUkExggVyATAAUkE9ggVyATwAUkExggVyATAAUkEpggVyASgAUkEpggVyASgAUkE9ggVyATwAUkFNggVyAUwAUkE9ggVyATwAUkEpggVyASgAUkE9ggVyATwAUkFNggVyAUwAUkFFggVyAUQAUkEhggVyASAAUkExggVyATAAUkFFggVyAUQAUkExggVyATAAUkEhggVyASAAUkExggVyATAAUkEhggVyASAAUkFNggVyAUwAUkEhggVyASAAUkE1ggVyATQAUkFFggVyAUQAUkE1ggVyATQAUkEhggVyASAAUkE1ggVyATQAUkFFggVyAUQAUkE9ggVyATwAUkEhgjwCASAAA/y8ATVRyawAAAlAAwSEAkSRag0KBJAAekStag0KBKwAekSRag0KBJAAekStag0KBKwAekStag0KBKwAekTJag0KBMgAekStag0KBKwAekTJag0KBMgAekS1ag0KBLQAekTRag0KBNAAekS1ag0KBLQAekTRag0KBNAAekSlag0KBKQAekTBag0KBMAAekSlag0KBKQAekTBag0KBMAAekSRag0KBJAAekStag0KBKwAekSRag0KBJAAekStag0KBKwAekStag0KBKwAekTJag0KBMgAekStag0KBKwAekTJag0KBMgAekS1ag0KBLQAekTRag0KBNAAekS1ag0KBLQAekTRag0KBNAAekSlag0KBKQAekTBag0KBMAAekSlag0KBKQAekTBag0KBMAAekSRag0KBJAAekStag0KBKwAekSRag0KBJAAekStag0KBKwAekStag0KBKwAekTJag0KBMgAekStag0KBKwAekTJag0KBMgAekS1ag0KBLQAekTRag0KBNAAekS1ag0KBLQAekTRag0KBNAAekSlag0KBKQAekTBag0KBMAAekSlag0KBKQAekTBag0KBMAAekSRag0KBJAAekStag0KBKwAekSRag0KBJAAekStag0KBKwAekStag0KBKwAekTJag0KBMgAekStag0KBKwAekTJag0KBMgAekS1ag0KBLQAekTRag0KBNAAekS1ag0KBLQAekTRag0KBNAAekSlag0KBKQAekTBag0KBMAAekSlag0KBKQAekTBag0KBMAAekSRajwCBJAAA/y8ATVRyawAAAbAAwlkAkjA8AJI0PACSNzyObIIwAACCNAAAgjcAFJIrPACSLzwAkjI8jmyCKwAAgi8AAIIyABSSLTwAkjA8AJI0PI5sgi0AAIIwAACCNAAUkik8AJItPACSMDyObIIpAACCLQAAgjAAFJIwPACSNDwAkjc8jmyCMAAAgjQAAII3ABSSKzwAki88AJIyPI5sgisAAIIvAACCMgAUki08AJIwPACSNDyObIItAACCMAAAgjQAFJIpPACSLTwAkjA8jmyCKQAAgi0AAIIwABSSMDwAkjQ8AJI3PI5sgjAAAII0AACCNwAUkis8AJIvPACSMjyObIIrAACCLwAAgjIAFJItPACSMDwAkjQ8jmyCLQAAgjAAAII0ABSSKTwAki08AJIwPI5sgikAAIItAACCMAAUkjA8AJI0PACSNzyObIIwAACCNAAAgjcAFJIrPACSLzwAkjI8jmyCKwAAgi8AAIIyABSSLTwAkjA8AJI0PI5sgi0AAIIwAACCNAAUkik8AJItPACSMDyObIIpAACCLQAAgjAAFJIwPACSNDwAkjc8jwCCMAAAgjQAAII3AAD/LwA=';
+
+  function base64ToArrayBuffer(b64) {
+    const binStr = window.atob(b64);
+    const bytes = new Uint8Array(binStr.length);
+    for (let i = 0; i < binStr.length; i++) {
+      bytes[i] = binStr.charCodeAt(i);
+    }
+    return bytes.buffer;
+  }
 
   function setupCanvasHiDpi(canvas) {
     if (!canvas) return null;
@@ -15,8 +57,9 @@
     if (!ctx) return null;
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    const w = rect.width > 0 ? rect.width : canvas.width;
-    const h = rect.height > 0 ? rect.height : canvas.height;
+    if (rect.width <= 0 || rect.height <= 0) return null;
+    const w = rect.width;
+    const h = rect.height;
     const targetW = Math.round(w * dpr);
     const targetH = Math.round(h * dpr);
     if (canvas.width !== targetW || canvas.height !== targetH) {
@@ -56,56 +99,80 @@
     let mode = 'raw'; // 'raw' | 'treated'
     let isPlaying = false;
     let rafId = null;
-    let phase = 0;
 
-    // Decodificação opcional via Web Audio (em HTTP) para exibir forma de onda exata das amostras
+    // Armazena AudioBuffer decodificado via HTTP (se disponível) para resolução por pixel
     const bufferStore = { raw: null, treated: null };
 
     function tryDecodeWaveform(key, url) {
-      const eng = global.studioAudioEngine;
+      if (!url) return;
       fetch(url)
         .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject()))
         .then((ab) => {
+          const OfflineCtx = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+          if (OfflineCtx) {
+            const offline = new OfflineCtx(1, 1, 44100);
+            return offline.decodeAudioData(ab);
+          }
+          const eng = global.studioAudioEngine;
           const ctx = eng ? eng.ensureContext() : new (window.AudioContext || window.webkitAudioContext)();
           return ctx.decodeAudioData(ab);
         })
         .then((audioBuf) => {
           bufferStore[key] = audioBuf;
-          if (fileStatus) fileStatus.textContent = 'Faixas prontas para comparação A/B';
           drawWaveform();
         })
         .catch(() => {
-          // Permanece usando <audio> nativo sem erro no console
+          // Mantém o envelope estático fiel (AB_STATIC_PEAKS) sem erro no console
         });
     }
 
-    rawAudio.addEventListener('loadedmetadata', () => {
-      if (fileStatus) fileStatus.textContent = 'Áudio bruto detectado';
+    function syncReadyStatus() {
+      const dur = Number.isFinite(rawAudio.duration) && rawAudio.duration > 0
+        ? rawAudio.duration
+        : (Number.isFinite(treatedAudio.duration) ? treatedAudio.duration : 0);
+      if (!isPlaying && fileStatus && dur > 0) {
+        fileStatus.textContent = `Faixas A/B prontas (${dur.toFixed(1)} s)`;
+      }
       updateTimeReadout();
+    }
+
+    rawAudio.addEventListener('loadedmetadata', () => {
+      syncReadyStatus();
       tryDecodeWaveform('raw', rawAudio.getAttribute('src'));
     });
 
     treatedAudio.addEventListener('loadedmetadata', () => {
-      if (fileStatus) fileStatus.textContent = 'Faixas A/B detectadas';
-      updateTimeReadout();
+      syncReadyStatus();
       tryDecodeWaveform('treated', treatedAudio.getAttribute('src'));
     });
+
+    [rawAudio, treatedAudio].forEach((audioEl) => {
+      audioEl.addEventListener('error', () => {
+        if (fileStatus) fileStatus.textContent = 'Arquivo de áudio indisponível';
+      });
+    });
+
+    if (rawAudio.readyState >= 1 || treatedAudio.readyState >= 1) {
+      syncReadyStatus();
+    }
+    tryDecodeWaveform('raw', rawAudio.getAttribute('src'));
+    tryDecodeWaveform('treated', treatedAudio.getAttribute('src'));
 
     function getActiveAudio() {
       return mode === 'treated' ? treatedAudio : rawAudio;
     }
 
-    function getInactiveAudio() {
-      return mode === 'treated' ? rawAudio : treatedAudio;
-    }
-
     function updateTimeReadout() {
       const active = getActiveAudio();
       const cur = active.currentTime || 0;
-      const dur = Number.isFinite(active.duration) ? active.duration : 0;
+      const dur = Number.isFinite(active.duration) && active.duration > 0 ? active.duration : 6.27;
       if (timeDisplay) timeDisplay.textContent = `${formatClock(cur)} / ${formatClock(dur)}`;
     }
 
+    /**
+     * Desenha a forma de onda SEMPRE FIXA (padrão DAW) — nunca encolhe ou deforma durante a reprodução.
+     * Apenas o cursor vertical (playhead) avança conforme o tempo da faixa.
+     */
     function drawWaveform() {
       const setup = setupCanvasHiDpi(canvas);
       if (!setup) return;
@@ -115,6 +182,7 @@
       ctx.fillStyle = '#09090B';
       ctx.fillRect(0, 0, w, h);
 
+      // Grade vertical discreta
       ctx.strokeStyle = '#18181C';
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -125,6 +193,7 @@
       }
       ctx.stroke();
 
+      // Eixo central (0 dB / repouso)
       ctx.strokeStyle = '#27272A';
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
@@ -136,6 +205,17 @@
       const activeColor = mode === 'treated' ? '#FF5500' : '#38BDF8';
       const activeAudio = getActiveAudio();
       const decoded = bufferStore[mode];
+      const totalDur = decoded
+        ? decoded.duration
+        : (Number.isFinite(activeAudio.duration) && activeAudio.duration > 0 ? activeAudio.duration : 6.27);
+      const progressRatio = totalDur > 0 ? Math.min(1, Math.max(0, (activeAudio.currentTime || 0) / totalDur)) : 0;
+      const playheadX = progressRatio * w;
+
+      // Sombra sutil da região já reproduzida
+      if (progressRatio > 0.001) {
+        ctx.fillStyle = mode === 'treated' ? 'rgba(255, 85, 0, 0.07)' : 'rgba(56, 189, 248, 0.07)';
+        ctx.fillRect(0, 0, playheadX, h);
+      }
 
       if (decoded) {
         const chData = decoded.getChannelData(0);
@@ -143,7 +223,7 @@
         const step = Math.max(1, Math.floor(totalSamples / w));
 
         ctx.strokeStyle = activeColor;
-        ctx.lineWidth = 1.4;
+        ctx.lineWidth = 1.35;
         ctx.beginPath();
         for (let x = 0; x < w; x++) {
           const start = x * step;
@@ -154,40 +234,42 @@
             if (v < min) min = v;
             if (v > max) max = v;
           }
-          ctx.moveTo(x + 0.5, midY + min * (h * 0.42));
-          ctx.lineTo(x + 0.5, midY + max * (h * 0.42));
+          if (min > max) {
+            min = 0;
+            max = 0;
+          }
+          ctx.moveTo(x + 0.5, midY + min * (h * 0.44));
+          ctx.lineTo(x + 0.5, midY + max * (h * 0.44));
         }
         ctx.stroke();
-
-        // Cursor de reprodução sincronizado
-        if (decoded.duration > 0) {
-          const playheadX = Math.min(w, (activeAudio.currentTime / decoded.duration) * w);
-          ctx.strokeStyle = '#F4F4F5';
-          ctx.lineWidth = 1.8;
-          ctx.beginPath();
-          ctx.moveTo(playheadX, 0);
-          ctx.lineTo(playheadX, h);
-          ctx.stroke();
-        }
       } else {
-        // Traço ilustrativo diferenciado para A (com ruído de piso simulado) vs. B (limpo e normalizado)
+        // Envelope estático real de 180 barras fixas (idêntico antes, durante e após o Play)
+        const peaks = AB_STATIC_PEAKS[mode] || AB_STATIC_PEAKS.raw;
+        const barStep = 3;
         ctx.strokeStyle = activeColor;
         ctx.lineWidth = 1.8;
         ctx.beginPath();
-        for (let x = 0; x <= w; x += 2) {
-          const t = (x / w) * Math.PI * 6 + phase;
-          const env = 0.45 + 0.4 * Math.sin((x / w) * Math.PI * 2 + phase * 0.35);
-          let yVal = Math.sin(t) * env;
-          if (mode === 'raw') {
-            const noise = 0.14 * Math.sin(t * 9.7 + 1.3) + 0.08 * Math.cos(t * 15.1);
-            yVal = yVal * 0.68 + noise;
-          } else {
-            yVal = yVal * 0.88;
-          }
-          const y = midY - yVal * (h * 0.4);
-          if (x === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
+        for (let x = 1; x < w; x += barStep) {
+          const pos = (x / w) * (peaks.length - 1);
+          const idx0 = Math.floor(pos);
+          const idx1 = Math.min(peaks.length - 1, idx0 + 1);
+          const frac = pos - idx0;
+          const amp = peaks[idx0] * (1 - frac) + peaks[idx1] * frac;
+          const halfBar = Math.max(1.2, amp * (h * 0.44));
+          ctx.moveTo(x + 0.5, midY - halfBar);
+          ctx.lineTo(x + 0.5, midY + halfBar);
         }
+        ctx.stroke();
+      }
+
+      // Cursor vertical de reprodução (playhead)
+      if (isPlaying || (activeAudio.currentTime && activeAudio.currentTime > 0.01)) {
+        const px = Math.round(playheadX) + 0.5;
+        ctx.strokeStyle = '#F4F4F5';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(px, 0);
+        ctx.lineTo(px, h);
         ctx.stroke();
       }
     }
@@ -197,7 +279,6 @@
         rafId = null;
         return;
       }
-      phase += 0.09;
       updateTimeReadout();
       drawWaveform();
       rafId = window.requestAnimationFrame(loop);
@@ -237,9 +318,14 @@
       if (wasPlaying) {
         try {
           await nextAudio.play();
+          if (fileStatus) {
+            fileStatus.textContent = mode === 'treated'
+              ? 'Reproduzindo faixa B (Tratada)'
+              : 'Reproduzindo faixa A (Bruta)';
+          }
         } catch (_) {
           updateUiPlaying(false);
-          if (fileStatus) fileStatus.textContent = 'Arquivo ausente em assets/audio/ (ver TODO_MIDIAS.md)';
+          if (fileStatus) fileStatus.textContent = 'Arquivo de áudio indisponível';
         }
       }
       updateTimeReadout();
@@ -255,6 +341,7 @@
           window.cancelAnimationFrame(rafId);
           rafId = null;
         }
+        syncReadyStatus();
         drawWaveform();
         return;
       }
@@ -271,7 +358,7 @@
       } catch (_) {
         updateUiPlaying(false);
         if (fileStatus) {
-          fileStatus.textContent = 'Adicione voz_bruta_original.wav e voz_tratada_master.wav (TODO_MIDIAS.md)';
+          fileStatus.textContent = 'Arquivo de áudio indisponível';
         }
       }
     }
@@ -290,9 +377,23 @@
         window.cancelAnimationFrame(rafId);
         rafId = null;
       }
-      updateTimeReadout();
+      syncReadyStatus();
       drawWaveform();
     }
+
+    // Clique na forma de onda para posicionar o tempo de reprodução (scrubbing)
+    canvas.style.cursor = 'pointer';
+    canvas.addEventListener('click', (event) => {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width <= 0) return;
+      const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+      const active = getActiveAudio();
+      if (Number.isFinite(active.duration) && active.duration > 0) {
+        active.currentTime = ratio * active.duration;
+        updateTimeReadout();
+        drawWaveform();
+      }
+    });
 
     [rawAudio, treatedAudio].forEach((a) => {
       a.addEventListener('ended', stop);
@@ -455,6 +556,38 @@
     let nextIdx = 0;
     let timerId = null;
 
+    function updateReadyBadge() {
+      if (!parsedMidi || isPlaying) return;
+      if (ledEl) {
+        ledEl.classList.remove('led--idle', 'led--pulse');
+        ledEl.classList.add('led--accent');
+      }
+      if (statusEl) {
+        statusEl.textContent = `MIDI pronto (${parsedMidi.notes.length} notas · ${formatClock(parsedMidi.totalDuration)})`;
+      }
+    }
+
+    async function ensureParsedMidi() {
+      if (parsedMidi) return parsedMidi;
+      try {
+        const res = await fetch(midiUrl);
+        if (!res.ok) throw new Error('HTTP');
+        const ab = await res.arrayBuffer();
+        parsedMidi = parseStandardMidiFile(ab);
+      } catch (_) {
+        try {
+          parsedMidi = parseStandardMidiFile(base64ToArrayBuffer(EMBEDDED_MIDI_B64));
+        } catch (__) {
+          parsedMidi = null;
+        }
+      }
+      updateReadyBadge();
+      return parsedMidi;
+    }
+
+    // Pré-carrega imediatamente para exibir contagem de notas e duração sem delay
+    ensureParsedMidi();
+
     function stop() {
       isPlaying = false;
       if (timerId) {
@@ -464,13 +597,11 @@
       playBtn.classList.remove('is-playing');
       playBtn.textContent = 'Reproduzir';
       if (ledEl) {
-        ledEl.classList.remove('led--accent', 'led--pulse');
-        ledEl.classList.add('led--idle');
+        ledEl.classList.remove('led--pulse');
+        ledEl.classList.add('led--accent');
       }
       if (progressEl) progressEl.style.width = '0%';
-      if (statusEl && parsedMidi) {
-        statusEl.textContent = `MIDI pronto (${parsedMidi.notes.length} notas)`;
-      }
+      updateReadyBadge();
     }
 
     async function start() {
@@ -479,20 +610,9 @@
       const ctx = eng.ensureContext();
       if (!ctx) return;
 
-      if (!parsedMidi) {
-        try {
-          const res = await fetch(midiUrl);
-          if (!res.ok) throw new Error('404');
-          const ab = await res.arrayBuffer();
-          parsedMidi = parseStandardMidiFile(ab);
-        } catch (_) {
-          if (statusEl) statusEl.textContent = 'Adicione composicao_autoral.mid (TODO_MIDIAS.md)';
-          return;
-        }
-      }
-
-      if (!parsedMidi.notes.length) {
-        if (statusEl) statusEl.textContent = 'Arquivo .mid sem notas detectadas';
+      const midi = await ensureParsedMidi();
+      if (!midi || !midi.notes.length) {
+        if (statusEl) statusEl.textContent = 'Arquivo .mid indisponível';
         return;
       }
 
@@ -510,24 +630,25 @@
       timerId = window.setInterval(() => {
         if (!isPlaying) return;
         const elapsed = ctx.currentTime - startCtxTime;
+        const pcmToggle = document.getElementById('midiEnginePCM');
+        const selectedMode = pcmToggle && pcmToggle.classList.contains('is-selected') ? 'pcm' : 'fm';
 
-        while (nextIdx < parsedMidi.notes.length && parsedMidi.notes[nextIdx].time <= elapsed + 0.12) {
-          const n = parsedMidi.notes[nextIdx++];
+        while (nextIdx < midi.notes.length && midi.notes[nextIdx].time <= elapsed + 0.12) {
+          const n = midi.notes[nextIdx++];
           if (n.channel === 9) continue; // ignora canal de percussão GM se houver
           const freq = 440 * Math.pow(2, (n.midi - 69) / 12);
-          const mode = n.channel % 2 === 0 ? 'pcm' : 'fm';
-          eng.playMidiNote(freq, mode, n.velocity, startCtxTime + n.time, n.duration);
+          eng.playMidiNote(freq, selectedMode, n.velocity, startCtxTime + n.time, n.duration);
         }
 
-        const pct = parsedMidi.totalDuration > 0
-          ? Math.min(100, Math.max(0, (elapsed / parsedMidi.totalDuration) * 100))
+        const pct = midi.totalDuration > 0
+          ? Math.min(100, Math.max(0, (elapsed / midi.totalDuration) * 100))
           : 0;
         if (progressEl) progressEl.style.width = `${pct.toFixed(1)}%`;
         if (statusEl) {
-          statusEl.textContent = `${formatClock(Math.max(0, elapsed))} / ${formatClock(parsedMidi.totalDuration)}`;
+          statusEl.textContent = `${formatClock(Math.max(0, elapsed))} / ${formatClock(midi.totalDuration)}`;
         }
 
-        if (elapsed > parsedMidi.totalDuration + 0.3) {
+        if (elapsed > midi.totalDuration + 0.3) {
           stop();
         }
       }, 30);

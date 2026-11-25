@@ -429,8 +429,9 @@
 
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    const cssWidth = rect.width > 0 ? rect.width : canvas.width;
-    const cssHeight = rect.height > 0 ? rect.height : canvas.height;
+    if (rect.width <= 0 || rect.height <= 0) return;
+    const cssWidth = rect.width;
+    const cssHeight = rect.height;
 
     canvas.width = Math.round(cssWidth * dpr);
     canvas.height = Math.round(cssHeight * dpr);
@@ -608,27 +609,41 @@
     const sampleButtons = document.querySelectorAll('[data-vowel-preset][data-audio-src]');
     if (!audioEl || !sampleButtons.length) return;
 
-    const setAudioReadyState = (ready, durationSec) => {
+    const setAudioReadyState = (state, durationSec) => {
       if (ledEl) {
-        ledEl.classList.remove('led--accent', 'led--idle');
-        ledEl.classList.add(ready ? 'led--accent' : 'led--idle');
+        ledEl.classList.remove('led--accent', 'led--idle', 'led--red');
+        if (state === 'error') ledEl.classList.add('led--red');
+        else ledEl.classList.add('led--accent');
       }
       if (statusEl) {
-        statusEl.textContent = ready
-          ? `Áudio pronto (${durationSec.toFixed(1)} s)`
-          : 'Aguardando gravação (ver TODO_MIDIAS.md)';
+        if (window.studioAudioEngine && window.studioAudioEngine.eq && window.studioAudioEngine.eq.active) {
+          return;
+        }
+        if (state === 'ready' && durationSec > 0) {
+          statusEl.textContent = `Áudio pronto (${durationSec.toFixed(1)} s)`;
+        } else if (state === 'error') {
+          statusEl.textContent = 'Arquivo de áudio indisponível';
+        } else {
+          statusEl.textContent = 'Áudio pronto';
+        }
       }
     };
 
-    audioEl.addEventListener('loadedmetadata', () => {
+    const syncFromAudioElement = () => {
       if (Number.isFinite(audioEl.duration) && audioEl.duration > 0) {
-        setAudioReadyState(true, audioEl.duration);
+        setAudioReadyState('ready', audioEl.duration);
       }
-    });
+    };
+
+    audioEl.addEventListener('loadedmetadata', syncFromAudioElement);
 
     audioEl.addEventListener('error', () => {
-      setAudioReadyState(false, 0);
+      setAudioReadyState('error', 0);
     });
+
+    if (audioEl.readyState >= 1) {
+      syncFromAudioElement();
+    }
 
     sampleButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -640,7 +655,7 @@
         });
         if (src) {
           if (pathEl) pathEl.textContent = src;
-          setAudioReadyState(false, 0);
+          setAudioReadyState('loading', 0);
           audioEl.src = src;
           audioEl.load();
         }
@@ -721,11 +736,27 @@
     const videoLed = document.getElementById('videoStatusLed');
     const videoBadge = document.getElementById('videoStatusBadge');
     if (video && videoLed && videoBadge) {
-      video.addEventListener('loadedmetadata', () => {
-        videoLed.classList.remove('led--idle');
-        videoLed.classList.add('led--accent');
-        videoBadge.textContent = `Vídeo carregado (${video.videoWidth}x${video.videoHeight})`;
+      const updateVideoReady = () => {
+        if (video.videoWidth > 0 && video.videoHeight > 0) {
+          videoLed.classList.remove('led--idle', 'led--red');
+          videoLed.classList.add('led--accent');
+          const durTxt = Number.isFinite(video.duration) && video.duration > 0
+            ? ` · ${Math.round(video.duration)} s`
+            : '';
+          videoBadge.textContent = `Vídeo pronto (${video.videoWidth}x${video.videoHeight}${durTxt})`;
+        }
+      };
+
+      video.addEventListener('loadedmetadata', updateVideoReady);
+      video.addEventListener('error', () => {
+        videoLed.classList.remove('led--accent');
+        videoLed.classList.add('led--red');
+        videoBadge.textContent = 'Arquivo de vídeo indisponível';
       });
+
+      if (video.readyState >= 1) {
+        updateVideoReady();
+      }
     }
   }
 

@@ -22,7 +22,8 @@
     'fisica-fourier': 'Física & Fourier',
     'pcm-digitalizacao': 'Digitalização & PCM',
     'compressao-formatos': 'Compressão & Formatos',
-    'sintese-midi-voz': 'Síntese, MIDI & Voz'
+    'sintese-midi-voz': 'Síntese, MIDI & Voz',
+    'estudio-autoral': 'Estúdio de Tratamento'
   };
 
   // Banco completo integrado (espelhando data/quiz-questions.json para funcionamento 100% offline mesmo via file://)
