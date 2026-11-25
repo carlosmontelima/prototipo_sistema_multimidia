@@ -64,7 +64,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - [ ] **`assets/imagens/pcm_amostragem_daw.png`**
   - **Onde aparece:** Aba **Digitalização & PCM** → Inspetor lateral (`Amostras Discretas na DAW`).
   - **Conteúdo:** Captura de tela em zoom máximo na DAW (Audacity/Reaper) evidenciando os pontos individuais de amostra de uma onda sonora digitalizada.
-- [ ] **`assets/imagens/compressao_espectrograma.png`**
+- [x] **`assets/imagens/compressao_espectrograma.png`**
   - **Onde aparece:** Aba **Compressão & Formatos** → Inspetor lateral (`Espectrograma: PCM/FLAC vs. Lossy`).
   - **Conteúdo:** Captura de espectrograma mostrando preservação do espectro completo em WAV/FLAC comparada ao corte de altas frequências em formato lossy (ex.: MP3 96/128 kbps).
 - [x] **`assets/imagens/midi_sequenciador_daw.png`**
