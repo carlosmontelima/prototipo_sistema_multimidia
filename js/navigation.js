@@ -687,6 +687,7 @@
 
       const revealImage = () => {
         if (img.naturalWidth > 0) {
+          figure.classList.add('has-image');
           img.hidden = false;
           placeholder.hidden = true;
         }
@@ -694,6 +695,7 @@
 
       img.addEventListener('load', revealImage);
       img.addEventListener('error', () => {
+        figure.classList.remove('has-image');
         img.hidden = true;
         placeholder.hidden = false;
       });

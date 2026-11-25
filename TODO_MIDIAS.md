@@ -61,7 +61,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - [x] **`assets/imagens/fisica_transdutores.png`**
   - **Onde aparece:** Aba **Física & Fourier** → Inspetor lateral (`Registro Fotográfico — Transdutores`).
   - **Conteúdo:** Foto original produzida pela equipe mostrando microfone (captação acústico-elétrica) e caixa de som/monitor ou fone de referência (reprodução elétrico-acústica).
-- [ ] **`assets/imagens/pcm_amostragem_daw.png`**
+- [x] **`assets/imagens/pcm_amostragem_daw.png`**
   - **Onde aparece:** Aba **Digitalização & PCM** → Inspetor lateral (`Amostras Discretas na DAW`).
   - **Conteúdo:** Captura de tela em zoom máximo na DAW (Audacity/Reaper) evidenciando os pontos individuais de amostra de uma onda sonora digitalizada.
 - [x] **`assets/imagens/compressao_espectrograma.png`**
