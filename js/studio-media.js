@@ -100,26 +100,108 @@
     let isPlaying = false;
     let rafId = null;
 
-    // Armazena AudioBuffer decodificado via HTTP (se disponível) para resolução por pixel
-    const bufferStore = { raw: null, treated: null };
+    // Armazena envelopes estáticos imutáveis extraídos diretamente dos bytes RIFF/WAV (sem AudioBuffer.getChannelData,
+    // evitando mutação cumulativa por proteções anti-fingerprinting de navegadores como Brave/extensões).
+    const peakStore = { raw: null, treated: null };
 
-    function tryDecodeWaveform(key, url) {
-      if (!url) return;
+    function extractWavPeaksFromArrayBuffer(arrayBuffer, numBins = 720) {
+      const view = new DataView(arrayBuffer);
+      if (view.byteLength < 44) return null;
+      const riff = String.fromCharCode(view.getUint8(0), view.getUint8(1), view.getUint8(2), view.getUint8(3));
+      if (riff !== 'RIFF') return null;
+
+      let pos = 12;
+      let audioFormat = 1;
+      let channels = 1;
+      let sampleRate = 48000;
+      let bitsPerSample = 16;
+      let dataStart = 0;
+      let dataLen = 0;
+
+      while (pos + 8 <= view.byteLength) {
+        const id = String.fromCharCode(
+          view.getUint8(pos),
+          view.getUint8(pos + 1),
+          view.getUint8(pos + 2),
+          view.getUint8(pos + 3)
+        );
+        const chunkSize = view.getUint32(pos + 4, true);
+        if (id === 'fmt ' && pos + 24 <= view.byteLength) {
+          audioFormat = view.getUint16(pos + 8, true);
+          channels = Math.max(1, view.getUint16(pos + 10, true));
+          sampleRate = Math.max(1, view.getUint32(pos + 12, true));
+          bitsPerSample = view.getUint16(pos + 22, true);
+        } else if (id === 'data') {
+          dataStart = pos + 8;
+          dataLen = Math.min(chunkSize, view.byteLength - dataStart);
+          break;
+        }
+        pos += 8 + chunkSize + (chunkSize % 2);
+      }
+
+      if (!dataStart || dataLen <= 0) return null;
+      const bytesPerSample = Math.max(1, Math.floor(bitsPerSample / 8));
+      const blockAlign = bytesPerSample * channels;
+      const totalFrames = Math.floor(dataLen / blockAlign);
+      if (totalFrames <= 0) return null;
+
+      const mins = new Float32Array(numBins);
+      const maxs = new Float32Array(numBins);
+      const framesPerBin = Math.max(1, Math.floor(totalFrames / numBins));
+
+      for (let b = 0; b < numBins; b++) {
+        const startFrame = b * framesPerBin;
+        const endFrame = b === numBins - 1 ? totalFrames : Math.min(totalFrames, startFrame + framesPerBin);
+        let minVal = 1.0;
+        let maxVal = -1.0;
+
+        for (let f = startFrame; f < endFrame; f++) {
+          const off = dataStart + f * blockAlign;
+          if (off + bytesPerSample > view.byteLength) break;
+          let sample = 0;
+          if (audioFormat === 1 && bitsPerSample === 16) {
+            sample = view.getInt16(off, true) / 32768;
+          } else if (audioFormat === 1 && bitsPerSample === 24) {
+            const b0 = view.getUint8(off);
+            const b1 = view.getUint8(off + 1);
+            const b2 = view.getUint8(off + 2);
+            const int24 = ((b0 | (b1 << 8) | (b2 << 16)) << 8) >> 8;
+            sample = int24 / 8388608;
+          } else if (audioFormat === 3 && bitsPerSample === 32) {
+            sample = view.getFloat32(off, true);
+          } else if (audioFormat === 1 && bitsPerSample === 8) {
+            sample = (view.getUint8(off) - 128) / 128;
+          }
+          if (sample < minVal) minVal = sample;
+          if (sample > maxVal) maxVal = sample;
+        }
+
+        if (minVal > maxVal) {
+          minVal = 0;
+          maxVal = 0;
+        }
+        mins[b] = minVal;
+        maxs[b] = maxVal;
+      }
+
+      return Object.freeze({
+        mins,
+        maxs,
+        numBins,
+        duration: totalFrames / sampleRate
+      });
+    }
+
+    function tryLoadStaticPeaks(key, url) {
+      if (!url || peakStore[key]) return;
       fetch(url)
         .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject()))
         .then((ab) => {
-          const OfflineCtx = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-          if (OfflineCtx) {
-            const offline = new OfflineCtx(1, 1, 44100);
-            return offline.decodeAudioData(ab);
+          const extracted = extractWavPeaksFromArrayBuffer(ab, 720);
+          if (extracted) {
+            peakStore[key] = extracted;
+            drawWaveform();
           }
-          const eng = global.studioAudioEngine;
-          const ctx = eng ? eng.ensureContext() : new (window.AudioContext || window.webkitAudioContext)();
-          return ctx.decodeAudioData(ab);
-        })
-        .then((audioBuf) => {
-          bufferStore[key] = audioBuf;
-          drawWaveform();
         })
         .catch(() => {
           // Mantém o envelope estático fiel (AB_STATIC_PEAKS) sem erro no console
@@ -138,12 +220,12 @@
 
     rawAudio.addEventListener('loadedmetadata', () => {
       syncReadyStatus();
-      tryDecodeWaveform('raw', rawAudio.getAttribute('src'));
+      tryLoadStaticPeaks('raw', rawAudio.getAttribute('src'));
     });
 
     treatedAudio.addEventListener('loadedmetadata', () => {
       syncReadyStatus();
-      tryDecodeWaveform('treated', treatedAudio.getAttribute('src'));
+      tryLoadStaticPeaks('treated', treatedAudio.getAttribute('src'));
     });
 
     [rawAudio, treatedAudio].forEach((audioEl) => {
@@ -155,8 +237,8 @@
     if (rawAudio.readyState >= 1 || treatedAudio.readyState >= 1) {
       syncReadyStatus();
     }
-    tryDecodeWaveform('raw', rawAudio.getAttribute('src'));
-    tryDecodeWaveform('treated', treatedAudio.getAttribute('src'));
+    tryLoadStaticPeaks('raw', rawAudio.getAttribute('src'));
+    tryLoadStaticPeaks('treated', treatedAudio.getAttribute('src'));
 
     function getActiveAudio() {
       return mode === 'treated' ? treatedAudio : rawAudio;
@@ -204,9 +286,9 @@
 
       const activeColor = mode === 'treated' ? '#FF5500' : '#38BDF8';
       const activeAudio = getActiveAudio();
-      const decoded = bufferStore[mode];
-      const totalDur = decoded
-        ? decoded.duration
+      const extracted = peakStore[mode];
+      const totalDur = extracted
+        ? extracted.duration
         : (Number.isFinite(activeAudio.duration) && activeAudio.duration > 0 ? activeAudio.duration : 6.27);
       const progressRatio = totalDur > 0 ? Math.min(1, Math.max(0, (activeAudio.currentTime || 0) / totalDur)) : 0;
       const playheadX = progressRatio * w;
@@ -217,27 +299,15 @@
         ctx.fillRect(0, 0, playheadX, h);
       }
 
-      if (decoded) {
-        const chData = decoded.getChannelData(0);
-        const totalSamples = chData.length;
-        const step = Math.max(1, Math.floor(totalSamples / w));
-
+      if (extracted) {
+        const { mins, maxs, numBins } = extracted;
         ctx.strokeStyle = activeColor;
         ctx.lineWidth = 1.35;
         ctx.beginPath();
         for (let x = 0; x < w; x++) {
-          const start = x * step;
-          let min = 1.0;
-          let max = -1.0;
-          for (let j = 0; j < step && start + j < totalSamples; j++) {
-            const v = chData[start + j];
-            if (v < min) min = v;
-            if (v > max) max = v;
-          }
-          if (min > max) {
-            min = 0;
-            max = 0;
-          }
+          const binIdx = Math.min(numBins - 1, Math.floor((x / w) * numBins));
+          const min = mins[binIdx];
+          const max = maxs[binIdx];
           ctx.moveTo(x + 0.5, midY + min * (h * 0.44));
           ctx.lineTo(x + 0.5, midY + max * (h * 0.44));
         }
