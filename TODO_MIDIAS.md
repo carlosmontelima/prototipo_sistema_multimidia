@@ -87,7 +87,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 
 - [x] **`assets/midi/composicao_autoral.mid`**
   - **O que produzir:** Composição musical original criada pela equipe em formato Standard MIDI File (`.mid`), de preferência com mais de uma trilha/canal (ex.: melodia + acompanhamento).
-- [ ] Guardar também o projeto fonte (`.mscz` ou `.mmpz`) na pasta de entrega do Drive para abrir durante a apresentação.
+- [x] Guardar também o projeto fonte (`.mscz` ou `.mmpz`) na pasta de entrega do Drive para abrir durante a apresentação.
 
 ---
 
@@ -147,5 +147,5 @@ prototipo-audio-digital/
 
 - [ ] Entregar todo o material **editado** e **não editado** (bruto) para avaliação.
 - [ ] Elaborar o **Relatório Técnico em PDF** (proposta revisada, problemas encontrados, técnicas, equipamentos, softwares, código-fonte e exemplos).
-- [ ] Preparar a apresentação em **PowerPoint (`.pptx`)** com resumo do relatório (máximo 15 minutos, participação de todos os integrantes).
+- [x] Preparar a apresentação em **PowerPoint (`.pptx`)** com resumo do relatório (máximo 15 minutos, participação de todos os integrantes).
 - [ ] Enviar relatório técnico e slides **separados no Drive virtual SEM compactar**.
