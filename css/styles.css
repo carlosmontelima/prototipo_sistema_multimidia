@@ -867,6 +867,41 @@ input[type="range"].studio-fader::-moz-range-thumb {
   color: var(--text-secondary);
 }
 
+.scope-legend {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-sep {
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.legend-dot--blue {
+  background-color: var(--compare-blue);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+}
+
+.legend-dot--accent {
+  background-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(255, 85, 0, 0.35);
+}
+
 .scope-canvas {
   display: block;
   width: 100%;

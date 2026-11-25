@@ -130,7 +130,7 @@
               <line x1="12" y1="17" x2="12" y2="21"/>
             </svg>
           </span>
-          <span class="nav-module-title">Estúdio Autoral</span>
+          <span class="nav-module-title">Estúdio de Tratamento</span>
           <span class="led led--sm nav-module-led" data-nav-led="estudio-autoral"></span>
         </button>
 
@@ -459,7 +459,11 @@
               <div class="stack-sm mt-sm">
                 <div class="scope-frame">
                   <div class="scope-meta">
-                    <span>Sinal original (#38BDF8) vs. amostras PAM e degraus quantizados (#FF5500)</span>
+                    <div class="scope-legend">
+                      <span class="legend-item"><span class="legend-dot legend-dot--blue" aria-hidden="true"></span>Sinal original</span>
+                      <span class="legend-sep" aria-hidden="true">vs.</span>
+                      <span class="legend-item"><span class="legend-dot legend-dot--accent" aria-hidden="true"></span>Amostras PAM e degraus quantizados</span>
+                    </div>
                   </div>
                   <canvas id="pcmSignalCanvas" class="scope-canvas" width="840" height="220" aria-label="Osciloscópio do sinal analógico, amostras PAM e degraus quantizados"></canvas>
                 </div>
@@ -1022,7 +1026,7 @@
           </div>
           <div class="panel-crosslinks">
             <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="fisica-fourier">Fourier</button>
-            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="estudio-autoral">Player MIDI Autoral</button>
+            <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="estudio-autoral">Estúdio de Tratamento</button>
           </div>
         </div>
 
@@ -1345,18 +1349,41 @@
                 </figcaption>
               </figure>
             </div>
+
+            <!-- Música MIDI (.mid) -->
+            <section class="inspector-section" id="mediaMidiPlayer">
+              <div class="row-between" style="margin-bottom: 10px;">
+                <h2 class="inspector-heading mb-0" style="display: flex; align-items: center; gap: 7px;">
+                  <span class="led led--sm led--idle" id="studioMidiLed"></span>
+                  <span>Música MIDI (.mid)</span>
+                </h2>
+                <span class="mono text-xs text-muted" id="studioMidiStatus">Aguardando .mid</span>
+              </div>
+              <p class="mono text-xs text-secondary" id="studioMidiFilePath" style="margin-bottom: 6px;">assets/midi/composicao_autoral.mid</p>
+              <p class="text-xs text-muted" id="studioMidiMeta" style="margin-bottom: 10px;">Composição original da equipe (LMMS / MuseScore).</p>
+
+              <div id="studioMidiHost" class="scope-frame">
+                <div class="row-wrap">
+                  <button type="button" class="btn btn--primary btn--xs" id="studioMidiPlayBtn" data-state="stopped">Reproduzir</button>
+                  <button type="button" class="btn btn--ghost btn--xs" id="studioMidiStopBtn">Stop</button>
+                </div>
+                <div class="quiz-progress-track" style="margin: 10px 0 2px;">
+                  <div class="quiz-progress-fill" id="studioMidiProgress" style="width: 0%;"></div>
+                </div>
+              </div>
+            </section>
           </aside>
         </div>
       </section>
 
       <!-- ====================================================================
-           AMBIENTE: ESTÚDIO AUTORAL (PRODUÇÃO DA EQUIPE)
+           AMBIENTE: ESTÚDIO DE TRATAMENTO (PRODUÇÃO DA EQUIPE)
            ==================================================================== -->
       <section class="env-panel" id="panel-estudio-autoral" role="tabpanel" aria-labelledby="title-estudio-autoral">
         <div class="panel-header">
           <div>
-            <h1 class="panel-title" id="title-estudio-autoral">Estúdio Autoral</h1>
-            <p class="panel-lead">Produção original de áudio digitalizado (bruto vs. tratado), vídeo demonstrativo e composição MIDI da equipe.</p>
+            <h1 class="panel-title" id="title-estudio-autoral">Estúdio de Tratamento</h1>
+            <p class="panel-lead">Comparação A/B de áudio digitalizado (bruto vs. tratado), demonstração em vídeo do tratamento e bancada de produção.</p>
           </div>
           <div class="panel-crosslinks">
             <button type="button" class="btn btn--ghost btn--xs" data-jump-tab="sintese-midi-voz">Equalizador &amp; MIDI</button>
@@ -1409,7 +1436,7 @@
             <!-- Vídeo Digital -->
             <section class="surface-panel" id="mediaVideoPlayer" aria-label="Player de Vídeo Demonstrativo">
               <div class="panel-bar">
-                <h2 class="panel-bar-title">Vídeo Digital — Demonstração da Equipe</h2>
+                <h2 class="panel-bar-title">Vídeo Digital — Demonstração do Tratamento</h2>
                 <span class="mono text-xs text-muted">MP4 / H.264</span>
               </div>
 
@@ -1428,31 +1455,8 @@
             </section>
           </div>
 
-          <!-- COLUNA DIREITA: MIDI + FOTO PRODUÇÃO + VETORIAIS -->
-          <aside class="workbench-inspector" aria-label="Produção MIDI, registros fotográficos e vetores">
-            <!-- Música MIDI (.mid) -->
-            <section class="inspector-section" id="mediaMidiPlayer">
-              <div class="row-between" style="margin-bottom: 10px;">
-                <h2 class="inspector-heading mb-0" style="display: flex; align-items: center; gap: 7px;">
-                  <span class="led led--sm led--idle" id="studioMidiLed"></span>
-                  <span>Música MIDI (.mid)</span>
-                </h2>
-                <span class="mono text-xs text-muted" id="studioMidiStatus">Aguardando .mid</span>
-              </div>
-              <p class="mono text-xs text-secondary" id="studioMidiFilePath" style="margin-bottom: 6px;">assets/midi/composicao_autoral.mid</p>
-              <p class="text-xs text-muted" id="studioMidiMeta" style="margin-bottom: 10px;">Composição original da equipe (LMMS / MuseScore).</p>
-
-              <div id="studioMidiHost" class="scope-frame">
-                <div class="row-wrap">
-                  <button type="button" class="btn btn--primary btn--xs" id="studioMidiPlayBtn" data-state="stopped">Reproduzir</button>
-                  <button type="button" class="btn btn--ghost btn--xs" id="studioMidiStopBtn">Stop</button>
-                </div>
-                <div class="quiz-progress-track" style="margin: 10px 0 2px;">
-                  <div class="quiz-progress-fill" id="studioMidiProgress" style="width: 0%;"></div>
-                </div>
-              </div>
-            </section>
-
+          <!-- COLUNA DIREITA: BANCADA DE PRODUÇÃO -->
+          <aside class="workbench-inspector" aria-label="Bancada de produção da equipe">
             <!-- Registro Fotográfico da Bancada (Imagem Matricial) -->
             <section class="inspector-section" id="mediaStudioPhoto">
               <h2 class="inspector-heading">Bancada de Produção</h2>
@@ -1473,45 +1477,6 @@
                   <span class="mono text-xs text-muted">PNG</span>
                 </figcaption>
               </figure>
-            </section>
-
-            <!-- Imagens Vetoriais (SVG) -->
-            <section class="inspector-section" id="mediaSvgGallery">
-              <h2 class="inspector-heading">Diagramas Vetoriais Fonte (SVG)</h2>
-              <div class="stack-sm">
-                <div class="svg-item-row">
-                  <div class="svg-item-thumb">
-                    <img src="assets/vetores/transdutor_alto_falante.svg" alt="Diagrama vetorial do alto-falante">
-                  </div>
-                  <div style="flex: 1; min-width: 0;">
-                    <div class="text-sm text-primary" style="font-weight: 500;">Transdutor Alto-Falante</div>
-                    <div class="mono text-xs text-muted">transdutor_alto_falante.svg</div>
-                  </div>
-                  <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="transdutor">Abrir</button>
-                </div>
-
-                <div class="svg-item-row">
-                  <div class="svg-item-thumb">
-                    <img src="assets/vetores/cadeia_digitalizacao_pcm.svg" alt="Diagrama vetorial da cadeia PCM">
-                  </div>
-                  <div style="flex: 1; min-width: 0;">
-                    <div class="text-sm text-primary" style="font-weight: 500;">Cadeia Digitalização PCM</div>
-                    <div class="mono text-xs text-muted">cadeia_digitalizacao_pcm.svg</div>
-                  </div>
-                  <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="pcm">Abrir</button>
-                </div>
-
-                <div class="svg-item-row">
-                  <div class="svg-item-thumb">
-                    <img src="assets/vetores/topologia_rede_midi.svg" alt="Diagrama vetorial da rede MIDI">
-                  </div>
-                  <div style="flex: 1; min-width: 0;">
-                    <div class="text-sm text-primary" style="font-weight: 500;">Topologia de Rede MIDI</div>
-                    <div class="mono text-xs text-muted">topologia_rede_midi.svg</div>
-                  </div>
-                  <button type="button" class="btn btn--ghost btn--xs" data-svg-inspect="midi">Abrir</button>
-                </div>
-              </div>
             </section>
           </aside>
         </div>

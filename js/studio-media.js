@@ -1,10 +1,9 @@
 /**
- * STUDIO AUDIO WORKBENCH — Fase 3: Controladores do Estúdio Autoral (js/studio-media.js)
+ * STUDIO AUDIO WORKBENCH — Controladores de Mídia (js/studio-media.js)
  *
  * Recursos:
- * - Comparador A/B sincronizado em tempo real (Áudio Bruto vs. Áudio Tratado) + forma de onda em Canvas
- * - Leitor binário nativo de Standard MIDI File (.mid) reproduzido via StudioAudioEngine (100% offline)
- * - Palco de Animação Procedural a 60fps em HTML5 Canvas (Lissajous, Onda Estacionária e Barras Espectrais)
+ * - Comparador A/B sincronizado em tempo real (Áudio Bruto vs. Áudio Tratado) no Estúdio de Tratamento
+ * - Leitor binário nativo de Standard MIDI File (.mid) reproduzido via StudioAudioEngine na aba Síntese, MIDI & Voz
  */
 
 (function (global) {
@@ -558,11 +557,14 @@
       const tabId = event.detail && event.detail.tabId;
       if (tabId !== 'estudio-autoral') {
         abCtrl.stop();
-        midiPlayerCtrl.stop();
       } else {
         window.requestAnimationFrame(() => {
           abCtrl.redraw();
         });
+      }
+
+      if (tabId !== 'sintese-midi-voz') {
+        midiPlayerCtrl.stop();
       }
     });
 

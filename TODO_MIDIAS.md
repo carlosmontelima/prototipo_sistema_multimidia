@@ -16,9 +16,9 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - [x] `js/studio-media.js` — Comparador A/B sincronizado em tempo real e player nativo `.mid` offline.
 - [x] `js/quiz-engine.js` — Motor do Quiz Interativo com embaralhamento Fisher-Yates (5 sorteadas de 25), feedback imediato e análise percentual.
 - [x] `data/quiz-questions.json` — Banco com 25 questões prontas (SM_05, SM_06 e FLAC).
-- [x] `assets/vetores/transdutor_alto_falante.svg` — Vetorial com camadas `<g>` (usado em **Física & Fourier** e **Estúdio Autoral**).
-- [x] `assets/vetores/cadeia_digitalizacao_pcm.svg` — Vetorial com camadas `<g>` (usado em **Digitalização & PCM** e **Estúdio Autoral**).
-- [x] `assets/vetores/topologia_rede_midi.svg` — Vetorial com camadas `<g>` (usado em **Síntese, MIDI & Voz** e **Estúdio Autoral**).
+- [x] `assets/vetores/transdutor_alto_falante.svg` — Vetorial com camadas `<g>` (usado em **Física & Fourier**).
+- [x] `assets/vetores/cadeia_digitalizacao_pcm.svg` — Vetorial com camadas `<g>` (usado em **Digitalização & PCM**).
+- [x] `assets/vetores/topologia_rede_midi.svg` — Vetorial com camadas `<g>` (usado em **Síntese, MIDI & Voz**).
 
 ---
 
@@ -33,7 +33,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 - [x] **`assets/audio/vogal_a_registro_grave.wav`**
   - **O que gravar:** Emissão sustentada (~3 a 5 segundos) da vogal `"a"` em **registro vocal grave** (fundamental baixa, harmônicos próximos).
   - **Formato recomendado:** WAV PCM, 44.1 kHz, 16-bit.
-- [ ] **`assets/audio/vogal_a_registro_agudo.wav`**
+- [x] **`assets/audio/vogal_a_registro_agudo.wav`**
   - **O que gravar:** Emissão sustentada (~3 a 5 segundos) da vogal `"a"` em **registro vocal agudo** (fundamental alta, maior espaçamento entre harmônicos no espectro FFT).
   - **Formato recomendado:** WAV PCM, 44.1 kHz, 16-bit.
 - [x] **`assets/audio/vogal_u_registro_grave.wav`**
@@ -41,7 +41,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
   - **Formato recomendado:** WAV PCM, 44.1 kHz, 16-bit.
 
 ### B. Faixas do Comparador A/B (Tratamento de Áudio: Bruto vs. Tratado)
-- **Onde aparece no sistema:** Aba **Estúdio Autoral** → módulo `#mediaAudioAB` (`<audio id="audioRawSource">` e `<audio id="audioTreatedSource">`).
+- **Onde aparece no sistema:** Aba **Estúdio de Tratamento** → módulo `#mediaAudioAB` (`<audio id="audioRawSource">` e `<audio id="audioTreatedSource">`).
 
 - [ ] **`assets/audio/voz_bruta_original.wav`**
   - **O que gravar:** Narração/locução original da equipe **sem nenhum tratamento** (áudio bruto direto do microfone, com ruído ambiente natural).
@@ -71,10 +71,10 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
   - **Onde aparece:** Aba **Síntese, MIDI & Voz** → Inspetor lateral (`Sequenciador MIDI na Prática`).
   - **Conteúdo:** Captura de tela do sequenciador MIDI (LMMS/MuseScore/Reaper) exibindo o piano roll/trilhas da composição autoral ou foto de teclado/controlador MIDI.
 - [x] **`assets/imagens/estudio_bancada.png`**
-  - **Onde aparece:** Aba **Estúdio Autoral** → Inspetor lateral (`#mediaStudioPhoto` — `Bancada de Produção`).
+  - **Onde aparece:** Aba **Estúdio de Tratamento** → Inspetor lateral (`#mediaStudioPhoto` — `Bancada de Produção`).
   - **Conteúdo:** Fotografia do ambiente/setup de gravação e edição utilizado pela equipe na produção do protótipo.
 - [ ] **`assets/imagens/poster_video.png`**
-  - **Onde aparece:** Aba **Estúdio Autoral** → capa (`poster`) do player `<video id="studioDemoVideo">`.
+  - **Onde aparece:** Aba **Estúdio de Tratamento** → capa (`poster`) do player `<video id="studioDemoVideo">`.
   - **Conteúdo:** Imagem `16:9` de pré-visualização do vídeo demonstrativo.
 
 ---
@@ -83,7 +83,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 
 - **Ferramentas sugeridas (proposta):** LMMS, MuseScore ou Piano Roll MIDI Editor.
 - **Pasta no projeto:** `prototipo-audio-digital/assets/midi/`
-- **Onde aparece no sistema:** Aba **Estúdio Autoral** → módulo `#mediaMidiPlayer` (`#studioMidiHost` / `#studioMidiFilePath`).
+- **Onde aparece no sistema:** Aba **Síntese, MIDI & Voz** → Inspetor lateral, abaixo da imagem do sequenciador (`#mediaMidiPlayer` / `#studioMidiFilePath`).
 
 - [x] **`assets/midi/composicao_autoral.mid`**
   - **O que produzir:** Composição musical original criada pela equipe em formato Standard MIDI File (`.mid`), de preferência com mais de uma trilha/canal (ex.: melodia + acompanhamento).
@@ -95,7 +95,7 @@ Este checklist lista **todos os arquivos originais que a equipe precisa produzir
 
 - **Ferramentas sugeridas (proposta):** OBS Studio + câmera de smartphone; edição em Sony Vegas ou Adobe Premiere.
 - **Pasta no projeto:** `prototipo-audio-digital/assets/video/`
-- **Onde aparece no sistema:** Aba **Estúdio Autoral** → módulo `#mediaVideoPlayer` (`<video id="studioDemoVideo">`).
+- **Onde aparece no sistema:** Aba **Estúdio de Tratamento** → módulo `#mediaVideoPlayer` (`<video id="studioDemoVideo">`).
 
 - [ ] **`assets/video/demonstracao_tratamento.mp4`**
   - **O que produzir:** Vídeo demonstrativo (sugestão: 30 s a 90 s) apresentando a captura e edição das mídias do projeto (ex.: tratamento de áudio na DAW / composição MIDI).
